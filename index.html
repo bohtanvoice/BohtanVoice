@@ -31,34 +31,60 @@
             top: 0;
             left: 0;
             width: 100%;
-            background-color: rgba(11, 12, 16, 0.9);
-            backdrop-filter: blur(10px);
+            background-color: rgba(11, 12, 16, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 40px;
-            border-bottom: 1px solid #1f2833;
+            padding: 12px 20px;
+            border-bottom: 1px solid rgba(31, 40, 51, 0.8);
             z-index: 1000;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
-        .logo {
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        @keyframes logoGlow {
+            0% { filter: drop-shadow(0 0 2px rgba(102, 252, 241, 0.4)); }
+            50% { filter: drop-shadow(0 0 12px rgba(102, 252, 241, 0.85)); }
+            100% { filter: drop-shadow(0 0 2px rgba(102, 252, 241, 0.4)); }
+        }
+
+        .site-logo {
+            height: 35px;
+            width: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #66fcf1;
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+
+        .logo-text {
             color: #66fcf1;
-            font-weight: bold;
-            font-size: 1.2rem;
-            letter-spacing: 1px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: 0.5px;
         }
 
         .nav-links {
             list-style: none;
             display: flex;
-            gap: 25px;
+            gap: 18px;
         }
 
         .nav-links a {
             color: #c5c6c7;
             text-decoration: none;
-            transition: color 0.3s;
-            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
         }
 
         .nav-links a:hover {
@@ -69,8 +95,8 @@
         header {
             background: linear-gradient(135deg, #1f2833, #0b0c10, #1f2833);
             background-size: 200% 200%;
-            animation: gradientMove 10s ease infinite;
-            padding: 110px 20px 40px 20px;
+            animation: gradientMove 12s ease infinite;
+            padding: 85px 20px 25px 20px;
             text-align: center;
             border-bottom: 1px solid #1f2833;
         }
@@ -81,17 +107,26 @@
             100% { background-position: 0% 50%; }
         }
 
-        header h1 {
-            color: #66fcf1;
-            font-size: 3rem;
-            margin-bottom: 10px;
-            letter-spacing: 2px;
-            text-shadow: 0 0 15px rgba(102, 252, 241, 0.3);
+        .hero-logo-box {
+            max-width: 140px;
+            margin: 0 auto 12px auto;
+        }
+
+        .hero-logo-img {
+            width: 100%;
+            height: auto;
+            border: none;
+            box-shadow: none;
+            mix-blend-mode: lighten;
+            -webkit-mask-image: radial-gradient(circle, #000 55%, transparent 95%);
+            mask-image: radial-gradient(circle, #000 55%, transparent 95%);
         }
 
         header p {
             color: #45a29e;
-            font-size: 1.3rem;
+            font-size: 1.05rem;
+            font-weight: 500;
+            padding: 0 10px;
         }
 
         .container {
@@ -104,27 +139,28 @@
         .hero-player-section {
             background-color: #1f2833;
             border: 2px solid #45a29e;
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 50px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            transition: border-color 0.3s;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .hero-player-section:hover {
             border-color: #66fcf1;
+            box-shadow: 0 20px 45px rgba(102, 252, 241, 0.1);
         }
 
         .hero-title {
             color: #66fcf1;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             margin-bottom: 15px;
         }
 
         .section-title {
             color: #66fcf1;
-            font-size: 1.8rem;
-            margin-bottom: 25px;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
             border-left: 4px solid #66fcf1;
             padding-left: 10px;
             margin-top: 40px;
@@ -133,27 +169,28 @@
         /* Other Projects Grid */
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
         }
 
         .card {
             background-color: #1f2833;
-            border-radius: 10px;
-            padding: 20px;
+            border-radius: 12px;
+            padding: 18px;
             border: 1px solid #45a29e;
             transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
         .card:hover {
-            transform: translateY(-8px) scale(1.02);
+            transform: translateY(-4px);
             border-color: #66fcf1;
-            box-shadow: 0 10px 30px rgba(102, 252, 241, 0.15);
+            box-shadow: 0 12px 30px rgba(102, 252, 241, 0.12);
         }
 
         .card h3 {
             color: #66fcf1;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
+            font-size: 1.15rem;
         }
 
         .small-video-container {
@@ -162,9 +199,9 @@
             padding-bottom: 56.25%;
             height: 0;
             background: #000;
-            border-radius: 6px;
+            border-radius: 8px;
             overflow: hidden;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .small-video-container iframe {
@@ -177,14 +214,16 @@
         }
 
         .about-text {
-            font-size: 1.1rem;
+            font-size: 1rem;
+            line-height: 1.6;
         }
 
         /* Contacts */
         .contacts-box {
             display: flex;
-            gap: 15px;
-            margin-top: 20px;
+            gap: 12px;
+            margin-top: 15px;
+            flex-wrap: wrap;
         }
 
         .btn {
@@ -192,16 +231,18 @@
             color: #66fcf1;
             border: 2px solid #66fcf1;
             padding: 10px 20px;
-            border-radius: 5px;
+            border-radius: 6px;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
         }
 
         .btn:hover {
             background-color: #66fcf1;
             color: #0b0c10;
-            box-shadow: 0 0 15px rgba(102, 252, 241, 0.4);
+            box-shadow: 0 0 20px rgba(102, 252, 241, 0.4);
+            transform: translateY(-2px);
         }
 
         footer {
@@ -210,8 +251,23 @@
             background-color: #0b0c10;
             color: #45a29e;
             border-top: 1px solid #1f2833;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             margin-top: 60px;
+        }
+
+        /* Mobile Optimization for Navigation */
+        @media(max-width: 600px) {
+            nav {
+                justify-content: center;
+                padding: 10px;
+            }
+            .nav-links {
+                gap: 12px;
+                font-size: 0.85rem;
+            }
+            header {
+                padding-top: 95px;
+            }
         }
     </style>
 </head>
@@ -219,7 +275,10 @@
 
     <!-- Navigation Bar -->
     <nav>
-        <div class="logo">BohtanVoice</div>
+        <a href="#" class="logo-container">
+            <img src="logo.png" alt="BohtanVoice" class="site-logo">
+            <span class="logo-text">BohtanVoice</span>
+        </a>
         <ul class="nav-links">
             <li><a href="#">Home</a></li>
             <li><a href="#projects">Projects</a></li>
@@ -230,7 +289,9 @@
 
     <!-- Header -->
     <header>
-        <h1>BohtanVoice</h1>
+        <div class="hero-logo-box">
+            <img src="logo.png" alt="BohtanVoice Studio" class="hero-logo-img">
+        </div>
         <p>Animation Voiceover Studio in the Batnaya Dialect</p>
     </header>
 
@@ -240,12 +301,11 @@
         <div class="hero-player-section">
             <h2 class="hero-title">🌟 Featured Premiere</h2>
             
-            <!-- Embedded Video Player -->
             <div style="width: 100%; height: 0px; position: relative; padding-bottom: 56.250%; border-radius: 8px; overflow: hidden;">
                 <iframe src="https://streamable.com/e/mmlei1" frameborder="0" width="100%" height="100%" allowfullscreen style="width: 100%; height: 100%; position: absolute; left: 0px; top: 0px; overflow: hidden;"></iframe>
             </div>
 
-            <p style="margin-top: 15px;">Watch our latest release featuring professional voice acting in the Batnaya dialect. Immerse yourself in a unique linguistic and visual experience!</p>
+            <p style="margin-top: 15px; color: #c5c6c7;">Watch our latest release featuring professional voice acting in the Batnaya dialect. Immerse yourself in a unique linguistic and visual experience!</p>
         </div>
 
         <!-- Other Projects Section -->
@@ -254,7 +314,7 @@
             <div class="card">
                 <h3>Project #2</h3>
                 <div class="small-video-container">
-                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                    <iframe src="https://streamable.com/e/hfk1g5" frameborder="0" width="100%" height="100%" allowfullscreen style="width: 100%; height: 100%; position: absolute; left: 0px; top: 0px; overflow: hidden;"></iframe>
                 </div>
                 <p>An adaptation of a popular animated fragment with a unique dialect translation.</p>
             </div>

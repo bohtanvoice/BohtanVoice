@@ -3,13 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BohtanVoice — Animation Voiceover Studio in the Bohtan dialect.">
+    <meta name="theme-color" content="#0b0c10">
+    <link rel="icon" href="logo.png">
     <title>BohtanVoice — Animation Voiceover Studio</title>
     <style>
+        :root {
+            --bg-main: #0b0c10;
+            --bg-panel: #1f2833;
+            --accent: #66fcf1;
+            --accent-soft: #45a29e;
+            --text-main: #c5c6c7;
+            --skeleton: #1f2833;
+            --skeleton-shine: #2c3844;
+        }
+
+        html.light-theme {
+            --bg-main: #f4f6f7;
+            --bg-panel: #ffffff;
+            --accent: #0e8f86;
+            --accent-soft: #147d75;
+            --text-main: #2b2f33;
+            --skeleton: #e4e8ea;
+            --skeleton-shine: #f0f3f5;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        html {
             scroll-behavior: smooth;
+        }
+
+        /* ============================================================
+           Custom scrollbar
+           ============================================================ */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-main);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-soft);
+            border-radius: 10px;
+            border: 2px solid var(--bg-main);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        /* Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-soft) var(--bg-main);
         }
 
         @keyframes fadeIn {
@@ -18,11 +72,17 @@
         }
 
         body {
-            background-color: #0b0c10;
-            color: #c5c6c7;
+            background-color: var(--bg-main);
+            color: var(--text-main);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             animation: fadeIn 0.8s ease-out;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Lock scroll when panel is open */
+        body.panel-open {
+            overflow: hidden;
         }
 
         /* Navigation Bar */
@@ -42,6 +102,12 @@
             z-index: 1000;
             flex-wrap: wrap;
             gap: 10px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        html.light-theme nav {
+            background-color: rgba(244, 246, 247, 0.92);
+            border-bottom: 1px solid rgba(14, 143, 134, 0.25);
         }
 
         .logo-container {
@@ -52,9 +118,9 @@
         }
 
         @keyframes logoGlow {
-            0% { filter: drop-shadow(0 0 2px rgba(102, 252, 241, 0.4)); }
-            50% { filter: drop-shadow(0 0 12px rgba(102, 252, 241, 0.85)); }
-            100% { filter: drop-shadow(0 0 2px rgba(102, 252, 241, 0.4)); }
+            0% { filter: drop-shadow(0 0 2px var(--accent)); opacity: 0.9; }
+            50% { filter: drop-shadow(0 0 12px var(--accent)); opacity: 1; }
+            100% { filter: drop-shadow(0 0 2px var(--accent)); opacity: 0.9; }
         }
 
         .site-logo {
@@ -62,43 +128,397 @@
             width: 35px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid #66fcf1;
+            border: 2px solid var(--accent);
             animation: logoGlow 3s ease-in-out infinite;
         }
 
         .logo-text {
-            color: #66fcf1;
+            color: var(--accent);
             font-weight: 700;
             font-size: 1.05rem;
             letter-spacing: 0.5px;
         }
 
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            background: none;
+            border: 1px solid var(--accent-soft);
+            border-radius: 8px;
+            color: var(--accent);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s ease;
+            padding: 0;
+            position: relative;
+        }
+
+        .icon-btn:hover {
+            border-color: var(--accent);
+            background-color: rgba(102, 252, 241, 0.08);
+        }
+
+        .icon-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        #settingsBtn:hover {
+            transform: rotate(30deg);
+        }
+
+        /* ============================================================
+           Favorites button — hover animation
+           ============================================================ */
+        #favoritesBtn svg {
+            transition: fill 0.25s ease, stroke 0.25s ease, transform 0.25s ease;
+            transform-origin: center;
+        }
+
+        /* Hover: мягкий подъём + лёгкое залитие */
+        #favoritesBtn:hover svg {
+            fill: var(--accent);
+            transform: scale(1.18);
+            animation: heartBeat 0.9s ease-in-out infinite;
+        }
+
+        /* Когда есть избранное — залито постоянно */
+        #favoritesBtn.has-items svg {
+            fill: var(--accent);
+        }
+
+        /* Если есть избранное и навели — пульс сильнее */
+        #favoritesBtn.has-items:hover svg {
+            fill: #ff4d6d;
+            stroke: #ff4d6d;
+        }
+
+        /* Активное нажатие */
+        #favoritesBtn:active svg {
+            transform: scale(0.9);
+            animation: none;
+        }
+
+        /* Пульсация (сердцебиение) */
+        @keyframes heartBeat {
+            0%   { transform: scale(1.18); }
+            15%  { transform: scale(1.28); }
+            30%  { transform: scale(1.18); }
+            45%  { transform: scale(1.25); }
+            60%  { transform: scale(1.18); }
+            100% { transform: scale(1.18); }
+        }
+
+        .fav-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background-color: var(--accent);
+            color: var(--bg-main);
+            font-size: 0.65rem;
+            font-weight: 700;
+            border-radius: 10px;
+            padding: 1px 5px;
+            min-width: 16px;
+            text-align: center;
+            line-height: 1.3;
+            display: none;
+        }
+
+        .fav-badge.visible {
+            display: block;
+        }
+
+        .menu-toggle {
+            width: 36px;
+            height: 36px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background-color: var(--accent);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .menu-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .menu-toggle.open span:nth-child(2) { opacity: 0; }
+        .menu-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
         .nav-links {
             list-style: none;
             display: flex;
-            gap: 18px;
+            flex-direction: column;
+            gap: 4px;
+            position: absolute;
+            top: 100%;
+            right: 20px;
+            background-color: var(--bg-panel);
+            border: 1px solid var(--accent-soft);
+            border-radius: 8px;
+            padding: 10px;
+            min-width: 160px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            transform: translateY(-8px);
+            pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        .nav-links.open {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
         }
 
         .nav-links a {
-            color: #c5c6c7;
+            color: var(--text-main);
             text-decoration: none;
             transition: color 0.3s ease;
             font-size: 0.9rem;
             font-weight: 500;
+            padding: 8px 10px;
+            border-radius: 5px;
+            display: block;
         }
 
         .nav-links a:hover {
-            color: #66fcf1;
+            color: var(--accent);
+            background-color: rgba(102, 252, 241, 0.08);
+        }
+
+        /* Side Panels */
+        .about-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(11, 12, 16, 0.6);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+            z-index: 1998;
+        }
+
+        .about-overlay.open { opacity: 1; pointer-events: auto; }
+
+        .about-panel {
+            position: fixed;
+            top: 0; right: 0;
+            width: 320px;
+            max-width: 85%;
+            height: 100%;
+            background-color: var(--bg-panel);
+            border-left: 2px solid var(--accent-soft);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+            padding: 90px 25px 25px 25px;
+            transform: translateX(100%);
+            transition: transform 0.35s cubic-bezier(0.165, 0.84, 0.44, 1), background-color 0.3s ease;
+            z-index: 1999;
+            overflow-y: auto;
+        }
+
+        .about-panel.open { transform: translateX(0); }
+
+        .about-panel h2 {
+            color: var(--accent);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        .about-panel p { font-size: 0.95rem; color: var(--text-main); line-height: 1.6; }
+
+        .about-close {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 1.5rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        /* Settings rows */
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(102, 252, 241, 0.15);
+        }
+
+        .setting-row:last-child { border-bottom: none; }
+        .setting-label { font-size: 0.95rem; color: var(--text-main); }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .switch-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(197, 198, 199, 0.25);
+            border: 1px solid var(--accent-soft);
+            transition: 0.3s;
+            border-radius: 24px;
+        }
+
+        .switch-slider::before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 2px;
+            background-color: var(--accent-soft);
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        .switch input:checked + .switch-slider {
+            background-color: rgba(102, 252, 241, 0.25);
+        }
+
+        .switch input:checked + .switch-slider::before {
+            transform: translateX(20px);
+            background-color: var(--accent);
+        }
+
+        .lang-toggle { display: flex; gap: 6px; }
+
+        .lang-btn {
+            background: none;
+            border: 1px solid var(--accent-soft);
+            color: var(--text-main);
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .lang-btn.active {
+            background-color: var(--accent);
+            color: var(--bg-main);
+            border-color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Favorites panel */
+        .fav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .fav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            background-color: var(--bg-main);
+            border: 1px solid var(--accent-soft);
+            border-radius: 10px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.25s ease;
+        }
+
+        .fav-item:hover {
+            border-color: var(--accent);
+            transform: translateX(3px);
+            box-shadow: 0 6px 18px rgba(102, 252, 241, 0.12);
+        }
+
+        .fav-item-thumb {
+            width: 42px;
+            height: 56px;
+            border-radius: 6px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background-color: var(--bg-panel);
+        }
+
+        .fav-item-title {
+            font-size: 0.9rem;
+            color: var(--accent);
+            font-weight: 600;
+            flex-grow: 1;
+            line-height: 1.3;
+        }
+
+        .fav-item-remove {
+            background: none;
+            border: none;
+            color: var(--accent-soft);
+            cursor: pointer;
+            font-size: 1.3rem;
+            line-height: 1;
+            padding: 2px 6px;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .fav-item-remove:hover {
+            color: #ff6b6b;
+            background-color: rgba(255, 107, 107, 0.1);
+        }
+
+        .fav-empty {
+            text-align: center;
+            padding: 30px 10px;
+            color: var(--accent-soft);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .fav-empty-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 12px;
+            opacity: 0.5;
         }
 
         /* Header */
         header {
-            background: linear-gradient(135deg, #1f2833, #0b0c10, #1f2833);
+            background: linear-gradient(135deg, var(--bg-panel), var(--bg-main), var(--bg-panel));
             background-size: 200% 200%;
             animation: gradientMove 12s ease infinite;
             padding: 85px 20px 25px 20px;
             text-align: center;
-            border-bottom: 1px solid #1f2833;
+            border-bottom: 1px solid var(--bg-panel);
         }
 
         @keyframes gradientMove {
@@ -107,238 +527,584 @@
             100% { background-position: 0% 50%; }
         }
 
-        .hero-logo-box {
-            max-width: 140px;
-            margin: 0 auto 12px auto;
-        }
+        .hero-logo-box { max-width: 140px; margin: 0 auto 12px auto; }
 
         .hero-logo-img {
             width: 100%;
             height: auto;
             border: none;
             box-shadow: none;
-            mix-blend-mode: lighten;
             -webkit-mask-image: radial-gradient(circle, #000 55%, transparent 95%);
             mask-image: radial-gradient(circle, #000 55%, transparent 95%);
         }
 
-        header p {
-            color: #45a29e;
-            font-size: 1.05rem;
-            font-weight: 500;
-            padding: 0 10px;
-        }
+        header p { color: var(--accent-soft); font-size: 1.05rem; font-weight: 500; padding: 0 10px; }
 
-        .container {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        /* Hero Player Section */
-        .hero-player-section {
-            background-color: #1f2833;
-            border: 2px solid #45a29e;
-            border-radius: 14px;
-            padding: 20px;
-            margin-bottom: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .hero-player-section:hover {
-            border-color: #66fcf1;
-            box-shadow: 0 20px 45px rgba(102, 252, 241, 0.1);
-        }
-
-        .hero-title {
-            color: #66fcf1;
-            font-size: 1.4rem;
-            margin-bottom: 15px;
-        }
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
 
         .section-title {
-            color: #66fcf1;
+            color: var(--accent);
             font-size: 1.6rem;
             margin-bottom: 20px;
-            border-left: 4px solid #66fcf1;
+            border-left: 4px solid var(--accent);
             padding-left: 10px;
             margin-top: 40px;
         }
 
-        /* Other Projects Grid */
+        /* Search Bar */
+        .search-wrapper {
+            margin: 0 0 25px;
+            position: relative;
+            max-width: 480px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 44px 12px 44px;
+            background-color: var(--bg-panel);
+            border: 1px solid var(--accent-soft);
+            border-radius: 10px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.25s ease;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: var(--accent-soft);
+            opacity: 0.7;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(102, 252, 241, 0.15);
+        }
+
+        html.light-theme .search-input:focus {
+            box-shadow: 0 0 0 3px rgba(14, 143, 134, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            stroke: var(--accent-soft);
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            pointer-events: none;
+            transition: stroke 0.25s ease;
+        }
+
+        .search-input:focus ~ .search-icon {
+            stroke: var(--accent);
+        }
+
+        .search-clear {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--accent-soft);
+            cursor: pointer;
+            font-size: 1.3rem;
+            line-height: 1;
+            padding: 4px 8px;
+            border-radius: 5px;
+            display: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-clear:hover {
+            color: var(--accent);
+            background-color: rgba(102, 252, 241, 0.08);
+        }
+
+        .search-clear.visible {
+            display: block;
+        }
+
+        /* No results message */
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--accent-soft);
+            font-size: 1rem;
+            background-color: var(--bg-panel);
+            border: 1px dashed var(--accent-soft);
+            border-radius: 12px;
+            margin-top: 10px;
+        }
+
+        .no-results.visible {
+            display: block;
+        }
+
+        .no-results-emoji {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* Poster Grid */
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 220px));
             gap: 20px;
+            justify-content: start;
         }
 
-        .card {
-            background-color: #1f2833;
+        .poster-card {
+            display: block;
+            background-color: var(--bg-panel);
             border-radius: 12px;
-            padding: 18px;
-            border: 1px solid #45a29e;
+            overflow: hidden;
+            border: 1px solid var(--accent-soft);
+            text-decoration: none;
+            color: inherit;
             transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            opacity: 0;
+            transform: translateY(20px);
+            position: relative;
         }
 
-        .card:hover {
+        .poster-card.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .poster-card:hover {
             transform: translateY(-4px);
-            border-color: #66fcf1;
+            border-color: var(--accent);
             box-shadow: 0 12px 30px rgba(102, 252, 241, 0.12);
         }
 
-        .card h3 {
-            color: #66fcf1;
-            margin-bottom: 12px;
-            font-size: 1.15rem;
-        }
-
-        .small-video-container {
+        .poster-image-box {
             position: relative;
             width: 100%;
-            padding-bottom: 56.25%;
-            height: 0;
-            background: #000;
-            border-radius: 8px;
+            padding-bottom: 140%;
             overflow: hidden;
-            margin-bottom: 12px;
+            background-color: var(--skeleton);
         }
 
-        .small-video-container iframe {
+        /* ============================================================
+           Skeleton loading
+           ============================================================ */
+        .poster-image-box::before {
+            content: "";
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
+            inset: 0;
+            background: linear-gradient(
+                90deg,
+                var(--skeleton) 0%,
+                var(--skeleton-shine) 50%,
+                var(--skeleton) 100%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            z-index: 1;
+            opacity: 1;
+            transition: opacity 0.4s ease;
         }
 
-        .about-text {
-            font-size: 1rem;
-            line-height: 1.6;
+        .poster-image-box.loaded::before {
+            opacity: 0;
         }
 
-        /* Contacts */
-        .contacts-box {
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .poster-image-box img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 2;
+        }
+
+        .poster-image-box img.loaded {
+            opacity: 1;
+        }
+
+        /* Favorite heart on poster */
+        .fav-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(11, 12, 16, 0.55);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(102, 252, 241, 0.4);
+            cursor: pointer;
             display: flex;
-            gap: 12px;
-            margin-top: 15px;
-            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            transition: all 0.25s ease;
+            z-index: 5;
         }
 
-        .btn {
-            background-color: transparent;
-            color: #66fcf1;
-            border: 2px solid #66fcf1;
-            padding: 10px 20px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
+        .fav-toggle:hover {
+            transform: scale(1.1);
+            background: rgba(11, 12, 16, 0.85);
+            border-color: var(--accent);
         }
 
-        .btn:hover {
-            background-color: #66fcf1;
-            color: #0b0c10;
-            box-shadow: 0 0 20px rgba(102, 252, 241, 0.4);
-            transform: translateY(-2px);
+        .fav-toggle svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--accent);
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: fill 0.25s ease, transform 0.25s ease;
         }
 
+        .fav-toggle.is-fav svg {
+            fill: #ff4d6d;
+            stroke: #ff4d6d;
+        }
+
+        .fav-toggle.is-fav {
+            border-color: #ff4d6d;
+        }
+
+        .fav-toggle:active svg {
+            transform: scale(0.85);
+        }
+
+        @keyframes heartPulse {
+            0% { transform: scale(1); }
+            40% { transform: scale(1.4); }
+            100% { transform: scale(1); }
+        }
+
+        .fav-toggle.just-clicked svg {
+            animation: heartPulse 0.4s ease;
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(11, 12, 16, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        .poster-card:hover .play-overlay { opacity: 1; }
+
+        .play-overlay span {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-left: 4px;
+        }
+
+        .play-overlay span::before {
+            content: "";
+            width: 0; height: 0;
+            border-top: 9px solid transparent;
+            border-bottom: 9px solid transparent;
+            border-left: 14px solid var(--accent);
+        }
+
+        @media (hover: none) {
+            .play-overlay {
+                opacity: 1;
+                background: linear-gradient(to top, rgba(11, 12, 16, 0.55) 0%, transparent 50%);
+                align-items: flex-end;
+                justify-content: flex-start;
+                padding: 12px;
+            }
+
+            .play-overlay span {
+                width: 44px;
+                height: 44px;
+                background: rgba(11, 12, 16, 0.7);
+                border-width: 2px;
+            }
+
+            .play-overlay span::before {
+                border-top-width: 7px;
+                border-bottom-width: 7px;
+                border-left-width: 11px;
+            }
+        }
+
+        .poster-info { padding: 14px; }
+
+        .poster-info h3 {
+            color: var(--accent);
+            margin-bottom: 6px;
+            font-size: 1.1rem;
+        }
+
+        .poster-info p { font-size: 0.9rem; color: var(--text-main); }
+
+        /* Coming Soon */
+        .coming-soon {
+            background-color: var(--bg-panel);
+            border: 1px dashed var(--accent-soft);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .coming-soon.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .coming-soon h3 { color: var(--accent); font-size: 1.2rem; margin-bottom: 8px; }
+        .coming-soon p { color: var(--text-main); font-size: 0.95rem; }
+
+        /* Footer */
         footer {
             text-align: center;
             padding: 30px;
-            background-color: #0b0c10;
-            color: #45a29e;
-            border-top: 1px solid #1f2833;
+            background-color: var(--bg-main);
+            color: var(--accent-soft);
+            border-top: 1px solid var(--bg-panel);
             font-size: 0.85rem;
             margin-top: 60px;
         }
 
-        /* Mobile Optimization for Navigation */
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: var(--bg-panel);
+            border: 1px solid var(--accent-soft);
+            color: var(--accent);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            z-index: 900;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .back-to-top:hover {
+            background-color: var(--accent);
+            color: var(--bg-main);
+            border-color: var(--accent);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(102, 252, 241, 0.35);
+        }
+
+        .back-to-top svg {
+            width: 22px;
+            height: 22px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* ============================================================
+           Toast notification
+           ============================================================ */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--bg-panel);
+            color: var(--text-main);
+            border: 1px solid var(--accent);
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 0.9rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 3000;
+            max-width: 90%;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast-icon {
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+
         @media(max-width: 600px) {
-            nav {
-                justify-content: center;
-                padding: 10px;
+            nav { padding: 10px 15px; }
+            header { padding-top: 95px; }
+            .back-to-top {
+                bottom: 16px;
+                right: 16px;
+                width: 44px;
+                height: 44px;
             }
-            .nav-links {
-                gap: 12px;
-                font-size: 0.85rem;
-            }
-            header {
-                padding-top: 95px;
+            .toast {
+                bottom: 80px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Navigation Bar -->
     <nav>
-        <a href="#" class="logo-container">
+        <a href="index.html" class="logo-container">
             <img src="logo.png" alt="BohtanVoice" class="site-logo">
             <span class="logo-text">BohtanVoice</span>
         </a>
-        <ul class="nav-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contacts">Contacts</a></li>
+
+        <div class="nav-actions">
+            <button class="icon-btn" id="favoritesBtn" aria-label="Favorites">
+                <svg viewBox="0 0 24 24">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <span class="fav-badge" id="favBadge">0</span>
+            </button>
+
+            <button class="icon-btn" id="settingsBtn" aria-label="Settings">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+            </button>
+
+            <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#" id="aboutLink" data-en="About Us" data-ru="О нас">About Us</a></li>
+            <li><a href="#" id="projectLink" data-en="About the Project" data-ru="О проекте">About the Project</a></li>
+            <li><a href="#contacts" data-en="Contacts" data-ru="Контакты">Contacts</a></li>
         </ul>
     </nav>
 
-    <!-- Header -->
     <header>
         <div class="hero-logo-box">
             <img src="logo.png" alt="BohtanVoice Studio" class="hero-logo-img">
         </div>
-        <p>Animation Voiceover Studio in the Batnaya Dialect</p>
+        <p data-en="Animation Voiceover Studio in the Bohtan Dialect" data-ru="Студия озвучивания мультфильмов на диалекте Bohtan">Animation Voiceover Studio in the Bohtan Dialect</p>
     </header>
 
     <div class="container">
-        
-        <!-- Hero Featured Player Section -->
-        <div class="hero-player-section">
-            <h2 class="hero-title">🌟 Featured Premiere</h2>
-            
-            <div style="width: 100%; height: 0px; position: relative; padding-bottom: 56.250%; border-radius: 8px; overflow: hidden;">
-                <iframe src="https://streamable.com/e/mmlei1" frameborder="0" width="100%" height="100%" allowfullscreen style="width: 100%; height: 100%; position: absolute; left: 0px; top: 0px; overflow: hidden;"></iframe>
-            </div>
 
-            <p style="margin-top: 15px; color: #c5c6c7;">Watch our latest release featuring professional voice acting in the Batnaya dialect. Immerse yourself in a unique linguistic and visual experience!</p>
+        <h2 id="projects" class="section-title" data-en="Our Dubs" data-ru="Наши озвучки">Our Dubs</h2>
+
+        <div class="search-wrapper">
+            <input
+                type="text"
+                class="search-input"
+                id="searchInput"
+                placeholder="Search dubs…"
+                data-en-placeholder="Search dubs…"
+                data-ru-placeholder="Поиск озвучек…"
+                autocomplete="off">
+            <svg class="search-icon" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <button class="search-clear" id="searchClear" aria-label="Clear">&times;</button>
         </div>
 
-        <!-- Other Projects Section -->
-        <h2 id="projects" class="section-title">Other Projects & Teasers</h2>
-        <div class="projects-grid">
-            <div class="card">
-                <h3>Project #2</h3>
-                <div class="small-video-container">
-                    <iframe src="https://streamable.com/e/hfk1g5" frameborder="0" width="100%" height="100%" allowfullscreen style="width: 100%; height: 100%; position: absolute; left: 0px; top: 0px; overflow: hidden;"></iframe>
+        <div class="projects-grid" id="projectsGrid">
+
+            <a href="video1.html" class="poster-card" data-search="zootopia зверополис latest release последний релиз bohtan" data-video-id="video1">
+                <div class="poster-image-box">
+                    <img src="poster1.jpg" alt="Zootopia poster" fetchpriority="high">
+                    <button class="fav-toggle" data-fav-id="video1" aria-label="Add to favorites">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </button>
+                    <div class="play-overlay"><span></span></div>
                 </div>
-                <p>An adaptation of a popular animated fragment with a unique dialect translation.</p>
-            </div>
-            <div class="card">
-                <h3>Experimental Dub</h3>
-                <div class="small-video-container">
-                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                <div class="poster-info">
+                    <h3>🌟 Zootopia</h3>
+                    <p data-en="Our latest release, dubbed in the Bohtan dialect." data-ru="Наш последний релиз, озвученный на диалекте Bohtan.">Our latest release, dubbed in the Bohtan dialect.</p>
                 </div>
-                <p>Short sketches and behind-the-scenes voice acting experiments from our studio.</p>
-            </div>
+            </a>
+
+            <a href="video2.html" class="poster-card" data-search="shrek шрек adaptation адаптация bohtan" data-video-id="video2">
+                <div class="poster-image-box">
+                    <img src="poster2.jpg" alt="Shrek poster" loading="lazy">
+                    <button class="fav-toggle" data-fav-id="video2" aria-label="Add to favorites">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </button>
+                    <div class="play-overlay"><span></span></div>
+                </div>
+                <div class="poster-info">
+                    <h3>Shrek</h3>
+                    <p data-en="An adaptation of a popular animated fragment." data-ru="Адаптация популярного анимационного фрагмента.">An adaptation of a popular animated fragment.</p>
+                </div>
+            </a>
+
         </div>
 
-        <!-- About Section -->
-        <h2 id="about" class="section-title">About the Studio</h2>
-        <p class="about-text">
-            <strong>BohtanVoice</strong> is an independent project dedicated to blending modern animation with the preservation of cultural heritage. We create high-quality translations and professional voiceovers in the unique Batnaya dialect, bringing beloved stories closer to a global audience.
-        </p>
+        <div class="no-results" id="noResults">
+            <span class="no-results-emoji">🔍</span>
+            <span data-en="Nothing found. Try another search." data-ru="Ничего не найдено. Попробуйте другой запрос.">Nothing found. Try another search.</span>
+        </div>
 
-        <!-- Contacts Section -->
-        <h2 id="contacts" class="section-title">Get in Touch</h2>
-        <p class="about-text">Want to support the project, collaborate, or suggest an idea for dubbing? Reach out to us via our social media:</p>
-        <div class="contacts-box">
-            <a href="#" class="btn">Telegram Channel</a>
-            <a href="#" class="btn">YouTube Studio</a>
+        <h2 class="section-title" data-en="Coming Soon" data-ru="Скоро на сайте">Coming Soon</h2>
+        <div class="coming-soon">
+            <h3 data-en="🎬 New dubs are in the works" data-ru="🎬 Готовим новые озвучки">🎬 New dubs are in the works</h3>
+            <p data-en="We're currently working on new animation dubs in the Bohtan dialect. Stay tuned!" data-ru="Сейчас работаем над новыми озвучками мультфильмов на диалекте Bohtan. Следите за обновлениями!">We're currently working on new animation dubs in the Bohtan dialect. Stay tuned!</p>
         </div>
 
     </div>
@@ -346,6 +1112,498 @@
     <footer>
         <p>&copy; 2026 BohtanVoice. All rights reserved.</p>
     </footer>
+
+    <!-- About Side Panel -->
+    <div class="about-overlay" id="aboutOverlay"></div>
+    <div class="about-panel" id="aboutPanel">
+        <button class="about-close" id="aboutClose">&times;</button>
+        <h2 data-en="About Us" data-ru="О нас">About Us</h2>
+        <p data-en="<strong>BohtanVoice</strong> is an independent project dedicated to blending modern animation with the preservation of cultural heritage. We create high-quality translations and professional voiceovers in the unique Bohtan dialect, bringing beloved stories closer to a global audience." data-ru="<strong>BohtanVoice</strong> — независимый проект, объединяющий современную анимацию с сохранением культурного наследия. Мы создаём качественные переводы и профессиональную озвучку на уникальном диалекте Bohtan, приближая любимые истории к зрителям по всему миру.">
+            <strong>BohtanVoice</strong> is an independent project dedicated to blending modern animation with the preservation of cultural heritage. We create high-quality translations and professional voiceovers in the unique Bohtan dialect, bringing beloved stories closer to a global audience.
+        </p>
+    </div>
+
+    <!-- About the Project Side Panel -->
+    <div class="about-overlay" id="projectOverlay"></div>
+    <div class="about-panel" id="projectPanel">
+        <button class="about-close" id="projectClose">&times;</button>
+        <h2 data-en="About the Project" data-ru="О проекте">About the Project</h2>
+        <p data-en="The Bohtan dialect is one of the rarest forms of Neo-Aramaic still spoken today, carried by only a small number of families. This project exists to give it new life through animation, so viewers can hear the language in a living, everyday context rather than only in academic records." data-ru="Диалект Bohtan — один из редчайших живых новоарамейских диалектов, на котором говорит лишь небольшое число семей. Этот проект существует, чтобы дать языку новую жизнь через анимацию — чтобы его можно было услышать не только в научных записях, но и в живой, повседневной речи.">
+            The Bohtan dialect is one of the rarest forms of Neo-Aramaic still spoken today, carried by only a small number of families. This project exists to give it new life through animation, so viewers can hear the language in a living, everyday context rather than only in academic records.
+        </p>
+    </div>
+
+    <!-- Settings Side Panel -->
+    <div class="about-overlay" id="settingsOverlay"></div>
+    <div class="about-panel" id="settingsPanel">
+        <button class="about-close" id="settingsClose">&times;</button>
+        <h2 data-en="Settings" data-ru="Настройки">Settings</h2>
+
+        <div class="setting-row">
+            <span class="setting-label" data-en="Dark theme" data-ru="Тёмная тема">Dark theme</span>
+            <label class="switch">
+                <input type="checkbox" id="themeSwitch">
+                <span class="switch-slider"></span>
+            </label>
+        </div>
+
+        <div class="setting-row">
+            <span class="setting-label" data-en="Language" data-ru="Язык">Language</span>
+            <div class="lang-toggle">
+                <button class="lang-btn" id="langEn">EN</button>
+                <button class="lang-btn" id="langRu">RU</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Favorites Side Panel -->
+    <div class="about-overlay" id="favoritesOverlay"></div>
+    <div class="about-panel" id="favoritesPanel">
+        <button class="about-close" id="favoritesClose">&times;</button>
+        <h2 data-en="Favorites" data-ru="Избранное">Favorites</h2>
+
+        <ul class="fav-list" id="favList"></ul>
+
+        <div class="fav-empty" id="favEmpty">
+            <span class="fav-empty-icon">🤍</span>
+            <span data-en="Nothing saved yet. Tap the heart on any dub to save it here." data-ru="Пока ничего нет. Нажмите на сердечко у любой озвучки, чтобы сохранить её здесь.">Nothing saved yet. Tap the heart on any dub to save it here.</span>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <svg viewBox="0 0 24 24">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span class="toast-icon" id="toastIcon">✓</span>
+        <span id="toastText"></span>
+    </div>
+
+    <script>
+        // ============================================================
+        // Shared storage keys
+        // ============================================================
+        const STORAGE = {
+            theme: 'bv_theme',
+            lang: 'bv_lang',
+            favorites: 'bv_favorites'
+        };
+
+        // ---------- Menu ----------
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('open');
+            navLinks.classList.toggle('open');
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('open');
+                navLinks.classList.remove('open');
+            });
+        });
+
+        // ============================================================
+        // Toast helper
+        // ============================================================
+        const toastEl = document.getElementById('toast');
+        const toastIcon = document.getElementById('toastIcon');
+        const toastText = document.getElementById('toastText');
+        let toastTimer;
+
+        function showToast(text, icon = '✓', duration = 2200) {
+            toastIcon.textContent = icon;
+            toastText.textContent = text;
+            toastEl.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toastEl.classList.remove('show'), duration);
+        }
+
+        // ============================================================
+        // Panel controller with scroll lock
+        // ============================================================
+        function bindPanel(linkId, panelId, overlayId, closeId) {
+            const link = document.getElementById(linkId);
+            const panel = document.getElementById(panelId);
+            const overlay = document.getElementById(overlayId);
+            const close = document.getElementById(closeId);
+
+            const open = (e) => {
+                if (e) e.preventDefault();
+                panel.classList.add('open');
+                overlay.classList.add('open');
+                document.body.classList.add('panel-open');
+            };
+            const shut = () => {
+                panel.classList.remove('open');
+                overlay.classList.remove('open');
+                setTimeout(() => {
+                    if (!document.querySelector('.about-panel.open')) {
+                        document.body.classList.remove('panel-open');
+                    }
+                }, 50);
+            };
+
+            if (link) link.addEventListener('click', open);
+            if (close) close.addEventListener('click', shut);
+            if (overlay) overlay.addEventListener('click', shut);
+
+            return { open, shut };
+        }
+
+        bindPanel('aboutLink', 'aboutPanel', 'aboutOverlay', 'aboutClose');
+        bindPanel('projectLink', 'projectPanel', 'projectOverlay', 'projectClose');
+        const settings = bindPanel(null, 'settingsPanel', 'settingsOverlay', 'settingsClose');
+        const favorites = bindPanel(null, 'favoritesPanel', 'favoritesOverlay', 'favoritesClose');
+
+        document.getElementById('settingsBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            menuToggle.classList.remove('open');
+            navLinks.classList.remove('open');
+            settings.open();
+        });
+
+        document.getElementById('favoritesBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            menuToggle.classList.remove('open');
+            navLinks.classList.remove('open');
+            renderFavorites();
+            favorites.open();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.about-panel.open').forEach(p => p.classList.remove('open'));
+                document.querySelectorAll('.about-overlay.open').forEach(o => o.classList.remove('open'));
+                document.body.classList.remove('panel-open');
+            }
+        });
+
+        // ---------- Theme ----------
+        const themeSwitch = document.getElementById('themeSwitch');
+
+        function applyTheme(theme) {
+            const isDark = theme === 'dark';
+            document.documentElement.classList.toggle('light-theme', !isDark);
+            themeSwitch.checked = isDark;
+            const meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute('content', isDark ? '#0b0c10' : '#f4f6f7');
+        }
+
+        const savedTheme = localStorage.getItem(STORAGE.theme) || 'dark';
+        applyTheme(savedTheme);
+
+        themeSwitch.addEventListener('change', () => {
+            const theme = themeSwitch.checked ? 'dark' : 'light';
+            localStorage.setItem(STORAGE.theme, theme);
+            applyTheme(theme);
+        });
+
+        // ---------- Language ----------
+        const langEnBtn = document.getElementById('langEn');
+        const langRuBtn = document.getElementById('langRu');
+
+        function applyLanguage(lang) {
+            document.querySelectorAll('[data-en]').forEach(el => {
+                el.innerHTML = lang === 'ru' ? el.getAttribute('data-ru') : el.getAttribute('data-en');
+            });
+            langEnBtn.classList.toggle('active', lang === 'en');
+            langRuBtn.classList.toggle('active', lang === 'ru');
+            document.documentElement.lang = lang;
+        }
+
+        const savedLang = localStorage.getItem(STORAGE.lang) || 'en';
+        applyLanguage(savedLang);
+
+        langEnBtn.addEventListener('click', () => {
+            localStorage.setItem(STORAGE.lang, 'en');
+            applyLanguage('en');
+            renderFavorites();
+        });
+
+        langRuBtn.addEventListener('click', () => {
+            localStorage.setItem(STORAGE.lang, 'ru');
+            applyLanguage('ru');
+            renderFavorites();
+        });
+
+        // ============================================================
+        // Cross-tab sync
+        // ============================================================
+        window.addEventListener('storage', (e) => {
+            if (e.key === STORAGE.theme) {
+                applyTheme(e.newValue || 'dark');
+            }
+            if (e.key === STORAGE.lang) {
+                applyLanguage(e.newValue || 'en');
+                updateSearchPlaceholder(e.newValue || 'en');
+                renderFavorites();
+            }
+            if (e.key === STORAGE.favorites) {
+                updateBadge();
+                applyFavStateOnPosters();
+                renderFavorites();
+            }
+        });
+
+        // ============================================================
+        // Skeleton loading
+        // ============================================================
+        document.querySelectorAll('.poster-image-box img').forEach(img => {
+            const box = img.parentElement;
+            const markLoaded = () => {
+                img.classList.add('loaded');
+                box.classList.add('loaded');
+            };
+
+            if (img.complete && img.naturalWidth > 0) {
+                markLoaded();
+            } else {
+                img.addEventListener('load', markLoaded);
+                img.addEventListener('error', markLoaded);
+            }
+        });
+
+        // ============================================================
+        // Favorites
+        // ============================================================
+        const favoritesBtn = document.getElementById('favoritesBtn');
+        const favBadge = document.getElementById('favBadge');
+        const favList = document.getElementById('favList');
+        const favEmpty = document.getElementById('favEmpty');
+
+        function getFavorites() {
+            try {
+                return JSON.parse(localStorage.getItem(STORAGE.favorites)) || [];
+            } catch {
+                return [];
+            }
+        }
+
+        function setFavorites(list) {
+            localStorage.setItem(STORAGE.favorites, JSON.stringify(list));
+        }
+
+        function updateBadge() {
+            const favs = getFavorites();
+            if (favs.length > 0) {
+                favBadge.textContent = favs.length;
+                favBadge.classList.add('visible');
+                favoritesBtn.classList.add('has-items');
+            } else {
+                favBadge.classList.remove('visible');
+                favoritesBtn.classList.remove('has-items');
+            }
+        }
+
+        function applyFavStateOnPosters() {
+            const favs = getFavorites();
+            document.querySelectorAll('.fav-toggle').forEach(btn => {
+                const id = btn.getAttribute('data-fav-id');
+                btn.classList.toggle('is-fav', favs.includes(id));
+            });
+        }
+
+        document.querySelectorAll('.fav-toggle').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const id = btn.getAttribute('data-fav-id');
+                const lang = localStorage.getItem(STORAGE.lang) || 'en';
+                let favs = getFavorites();
+                const wasFav = favs.includes(id);
+
+                if (wasFav) {
+                    favs = favs.filter(x => x !== id);
+                    showToast(
+                        lang === 'ru' ? 'Удалено из избранного' : 'Removed from favorites',
+                        '💔'
+                    );
+                } else {
+                    favs.push(id);
+                    btn.classList.add('just-clicked');
+                    setTimeout(() => btn.classList.remove('just-clicked'), 500);
+                    showToast(
+                        lang === 'ru' ? 'Добавлено в избранное' : 'Added to favorites',
+                        '❤️'
+                    );
+                }
+
+                setFavorites(favs);
+                updateBadge();
+                applyFavStateOnPosters();
+            });
+        });
+
+        function renderFavorites() {
+            const favs = getFavorites();
+            favList.innerHTML = '';
+
+            if (favs.length === 0) {
+                favEmpty.style.display = 'block';
+                return;
+            }
+            favEmpty.style.display = 'none';
+
+            favs.forEach(id => {
+                const card = document.querySelector(`.poster-card[data-video-id="${id}"]`);
+                if (!card) return;
+
+                const link = card.getAttribute('href');
+                const poster = card.querySelector('.poster-image-box img')?.getAttribute('src') || '';
+                const titleEl = card.querySelector('.poster-info h3');
+                const title = titleEl ? titleEl.textContent.trim() : id;
+
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <a href="${link}" class="fav-item">
+                        <img class="fav-item-thumb" src="${poster}" alt="">
+                        <span class="fav-item-title">${title}</span>
+                        <button class="fav-item-remove" data-remove-id="${id}" aria-label="Remove">&times;</button>
+                    </a>
+                `;
+                favList.appendChild(li);
+            });
+
+            favList.querySelectorAll('.fav-item-remove').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const id = btn.getAttribute('data-remove-id');
+                    const lang = localStorage.getItem(STORAGE.lang) || 'en';
+                    let favs = getFavorites();
+                    favs = favs.filter(x => x !== id);
+                    setFavorites(favs);
+
+                    updateBadge();
+                    applyFavStateOnPosters();
+                    renderFavorites();
+                    showToast(
+                        lang === 'ru' ? 'Удалено из избранного' : 'Removed from favorites',
+                        '💔'
+                    );
+                });
+            });
+        }
+
+        updateBadge();
+        applyFavStateOnPosters();
+        renderFavorites();
+
+        // ============================================================
+        // Reveal animation
+        // ============================================================
+        const revealEls = document.querySelectorAll('.poster-card, .coming-soon');
+
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, i) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.classList.add('revealed');
+                        }, i * 80);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.15,
+                rootMargin: '0px 0px -40px 0px'
+            });
+
+            revealEls.forEach(el => observer.observe(el));
+        } else {
+            revealEls.forEach(el => el.classList.add('revealed'));
+        }
+
+        // ============================================================
+        // Search
+        // ============================================================
+        const searchInput = document.getElementById('searchInput');
+        const searchClear = document.getElementById('searchClear');
+        const projectsGrid = document.getElementById('projectsGrid');
+        const noResults = document.getElementById('noResults');
+        const posterCards = projectsGrid.querySelectorAll('.poster-card');
+
+        function filterPosters() {
+            const query = searchInput.value.trim().toLowerCase();
+            let visibleCount = 0;
+
+            posterCards.forEach(card => {
+                const searchData = (card.getAttribute('data-search') || '').toLowerCase();
+                const textContent = card.textContent.toLowerCase();
+                const haystack = searchData + ' ' + textContent;
+
+                const matches = query === '' || haystack.includes(query);
+
+                if (matches) {
+                    card.style.display = '';
+                    card.classList.add('revealed');
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (visibleCount === 0 && query !== '') {
+                noResults.classList.add('visible');
+            } else {
+                noResults.classList.remove('visible');
+            }
+
+            if (query !== '') {
+                searchClear.classList.add('visible');
+            } else {
+                searchClear.classList.remove('visible');
+            }
+        }
+
+        searchInput.addEventListener('input', filterPosters);
+
+        searchClear.addEventListener('click', () => {
+            searchInput.value = '';
+            filterPosters();
+            searchInput.focus();
+        });
+
+        function updateSearchPlaceholder(lang) {
+            const placeholder = lang === 'ru'
+                ? searchInput.getAttribute('data-ru-placeholder')
+                : searchInput.getAttribute('data-en-placeholder');
+            searchInput.placeholder = placeholder;
+        }
+
+        updateSearchPlaceholder(localStorage.getItem(STORAGE.lang) || 'en');
+
+        langEnBtn.addEventListener('click', () => updateSearchPlaceholder('en'));
+        langRuBtn.addEventListener('click', () => updateSearchPlaceholder('ru'));
+
+        // ============================================================
+        // Back to top
+        // ============================================================
+        const backToTop = document.getElementById('backToTop');
+
+        function toggleBackToTop() {
+            if (window.scrollY > 400) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        }
+
+        window.addEventListener('scroll', toggleBackToTop, { passive: true });
+        toggleBackToTop();
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
 
 </body>
 </html>

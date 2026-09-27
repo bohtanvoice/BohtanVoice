@@ -28,17 +28,24 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        html { scroll-behavior: smooth; }
+        html {
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-soft) transparent;
+        }
 
-        ::-webkit-scrollbar { width: 10px; height: 10px; }
-        ::-webkit-scrollbar-track { background: var(--bg-main); }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb {
             background: var(--accent-soft);
-            border-radius: 10px;
-            border: 2px solid var(--bg-main);
+            border-radius: 8px;
         }
         ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-        * { scrollbar-width: thin; scrollbar-color: var(--accent-soft) var(--bg-main); }
+
+        @media (max-width: 768px) {
+            ::-webkit-scrollbar { width: 0px; height: 0px; }
+            html { scrollbar-width: none; -ms-overflow-style: none; }
+        }
 
         body {
             background-color: var(--bg-main);
@@ -54,9 +61,7 @@
             position: fixed;
             top: 0; left: 0;
             width: 100%;
-            background-color: rgba(11, 12, 16, 0.92);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background-color: #0b0c10;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -69,7 +74,7 @@
         }
 
         html.light-theme nav {
-            background-color: rgba(244, 246, 247, 0.92);
+            background-color: #f4f6f7;
             border-bottom: 1px solid rgba(14, 143, 134, 0.25);
         }
 
@@ -80,37 +85,23 @@
             text-decoration: none;
         }
 
-        @keyframes logoGlow {
-            0% { filter: drop-shadow(0 0 2px var(--accent)); opacity: 0.9; }
-            50% { filter: drop-shadow(0 0 12px var(--accent)); opacity: 1; }
-            100% { filter: drop-shadow(0 0 2px var(--accent)); opacity: 0.9; }
-        }
-
         .site-logo {
-            height: 35px;
-            width: 35px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--accent);
-            animation: logoGlow 3s ease-in-out infinite;
+            height: 45px;
+            width: 45px;
+            object-fit: contain;
         }
 
         .logo-text {
             color: var(--accent);
             font-weight: 700;
-            font-size: 1.05rem;
+            font-size: 1.15rem;
             letter-spacing: 0.5px;
         }
 
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .nav-actions { display: flex; align-items: center; gap: 8px; }
 
         .icon-btn {
-            width: 36px;
-            height: 36px;
+            width: 36px; height: 36px;
             background: none;
             border: 1px solid var(--accent-soft);
             border-radius: 8px;
@@ -131,8 +122,7 @@
         }
 
         .icon-btn svg {
-            width: 18px;
-            height: 18px;
+            width: 18px; height: 18px;
             stroke: currentColor;
             fill: none;
             stroke-width: 2;
@@ -148,19 +138,9 @@
             animation: heartBeat 0.9s ease-in-out infinite;
         }
 
-        #favNavBtn.has-items svg {
-            fill: var(--accent);
-        }
-
-        #favNavBtn.has-items:hover svg {
-            fill: #ff4d6d;
-            stroke: #ff4d6d;
-        }
-
-        #favNavBtn:active svg {
-            transform: scale(0.9);
-            animation: none;
-        }
+        #favNavBtn.has-items svg { fill: var(--accent); }
+        #favNavBtn.has-items:hover svg { fill: #ff4d6d; stroke: #ff4d6d; }
+        #favNavBtn:active svg { transform: scale(0.9); animation: none; }
 
         @keyframes heartBeat {
             0%   { transform: scale(1.18); }
@@ -173,8 +153,7 @@
 
         .fav-badge {
             position: absolute;
-            top: -4px;
-            right: -4px;
+            top: -4px; right: -4px;
             background-color: var(--accent);
             color: var(--bg-main);
             font-size: 0.65rem;
@@ -242,11 +221,7 @@
             object-fit: cover;
         }
 
-        .info-text {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+        .info-text { display: flex; flex-direction: column; gap: 20px; }
 
         .info-title {
             color: var(--accent);
@@ -276,11 +251,7 @@
             font-weight: 500;
         }
 
-        .actions-row {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
+        .actions-row { display: flex; gap: 12px; flex-wrap: wrap; }
 
         .action-btn {
             display: inline-flex;
@@ -322,10 +293,7 @@
             color: #ff4d6d;
         }
 
-        .action-btn.is-fav svg {
-            fill: #ff4d6d;
-            stroke: #ff4d6d;
-        }
+        .action-btn.is-fav svg { fill: #ff4d6d; stroke: #ff4d6d; }
 
         .action-btn.is-fav:hover {
             background: #ff4d6d;
@@ -334,10 +302,7 @@
             box-shadow: 0 0 20px rgba(255, 77, 109, 0.4);
         }
 
-        .action-btn.is-fav:hover svg {
-            fill: #ffffff;
-            stroke: #ffffff;
-        }
+        .action-btn.is-fav:hover svg { fill: #ffffff; stroke: #ffffff; }
 
         .section-heading {
             color: var(--accent);
@@ -378,76 +343,6 @@
             top: 0; left: 0;
             width: 100%; height: 100%;
             border: none;
-            z-index: 2;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .player-box iframe.ready { opacity: 1; }
-
-        .player-placeholder {
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: opacity 0.5s ease;
-        }
-
-        .player-placeholder::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: rgba(11, 12, 16, 0.45);
-        }
-
-        .player-placeholder.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .placeholder-play {
-            position: relative;
-            z-index: 2;
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            border: 3px solid var(--accent);
-            background: rgba(11, 12, 16, 0.6);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding-left: 6px;
-            transition: all 0.3s ease;
-            animation: pulse 2s infinite;
-        }
-
-        .placeholder-play::before {
-            content: "";
-            width: 0; height: 0;
-            border-top: 12px solid transparent;
-            border-bottom: 12px solid transparent;
-            border-left: 18px solid var(--accent);
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(102, 252, 241, 0.5); }
-            50% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(102, 252, 241, 0); }
-        }
-
-        .player-placeholder:hover .placeholder-play {
-            transform: scale(1.1);
-            background: var(--accent);
-        }
-
-        .player-placeholder:hover .placeholder-play::before {
-            border-left-color: var(--bg-main);
         }
 
         .more-grid {
@@ -522,7 +417,7 @@
             height: 100%;
             background-color: var(--bg-panel);
             border-left: 2px solid var(--accent-soft);
-            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+            box-shadow: none;
             padding: 90px 25px 25px 25px;
             transform: translateX(100%);
             transition: transform 0.35s cubic-bezier(0.165, 0.84, 0.44, 1), background-color 0.3s ease;
@@ -530,7 +425,10 @@
             overflow-y: auto;
         }
 
-        .about-panel.open { transform: translateX(0); }
+        .about-panel.open {
+            transform: translateX(0);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+        }
 
         .about-panel h2 {
             color: var(--accent);
@@ -662,44 +560,19 @@
         }
 
         @media (max-width: 700px) {
-            .info-section {
-                grid-template-columns: 1fr;
-                gap: 24px;
-            }
-            .info-poster {
-                max-width: 240px;
-                margin: 0 auto;
-            }
-            .info-title {
-                font-size: 1.5rem;
-                text-align: center;
-            }
-            .info-meta {
-                font-size: 0.85rem;
-                gap: 8px 14px;
-                padding: 16px;
-            }
+            .info-section { grid-template-columns: 1fr; gap: 24px; }
+            .info-poster { max-width: 240px; margin: 0 auto; }
+            .info-title { font-size: 1.5rem; text-align: center; }
+            .info-meta { font-size: 0.85rem; gap: 8px 14px; padding: 16px; }
             .actions-row { justify-content: center; }
             .section-heading { font-size: 1.1rem; }
-            .description-block {
-                padding: 18px;
-                font-size: 0.95rem;
-            }
+            .description-block { padding: 18px; font-size: 0.95rem; }
         }
 
         @media (max-width: 600px) {
             nav { padding: 10px 15px; }
             .container { padding: 95px 15px 40px 15px; }
-            .placeholder-play { width: 56px; height: 56px; }
-            .placeholder-play::before {
-                border-top-width: 9px;
-                border-bottom-width: 9px;
-                border-left-width: 14px;
-            }
-            .action-btn {
-                font-size: 0.85rem;
-                padding: 10px 14px;
-            }
+            .action-btn { font-size: 0.85rem; padding: 10px 14px; }
         }
     </style>
 </head>
@@ -808,12 +681,8 @@
             <span data-en="Watch the dub" data-ru="Смотреть озвучку">Watch the dub</span>
         </h2>
         <div class="player-box">
-            <div class="player-placeholder" id="playerPlaceholder" style="background-image: url('poster2.jpg');">
-                <div class="placeholder-play"></div>
-            </div>
             <iframe
-                id="streamableFrame"
-                data-src="https://streamable.com/e/hfk1g5"
+                src="https://streamable.com/e/hfk1g5"
                 allowfullscreen></iframe>
         </div>
 
@@ -829,7 +698,6 @@
         <p>&copy; 2026 BohtanVoice. All rights reserved.</p>
     </footer>
 
-    <!-- Favorites Side Panel -->
     <div class="about-overlay" id="favoritesOverlay"></div>
     <div class="about-panel" id="favoritesPanel">
         <button class="about-close" id="favoritesClose">&times;</button>
@@ -853,8 +721,8 @@
         const ALL_VIDEOS = [
             {
                 id: 'video1',
-                title: '🌟 Zootopia',
-                titleRu: '🌟 Зверополис',
+                title: 'Zootopia',
+                titleRu: 'Зверополис',
                 poster: 'poster1.jpg',
                 url: 'video1.html',
                 descEn: 'Animation, Comedy',
@@ -877,9 +745,6 @@
             favorites: 'bv_favorites'
         };
 
-        // ============================================================
-        // DOM references
-        // ============================================================
         const favNavBtn = document.getElementById('favNavBtn');
         const favBadge = document.getElementById('favBadge');
         const favBtn = document.getElementById('favBtn');
@@ -894,22 +759,14 @@
         const toastEl = document.getElementById('toast');
 
         const shareBtn = document.getElementById('shareBtn');
-        const playerPlaceholder = document.getElementById('playerPlaceholder');
-        const streamableFrame = document.getElementById('streamableFrame');
         const moreGrid = document.getElementById('moreGrid');
 
-        // ============================================================
-        // Theme
-        // ============================================================
         function applyTheme(theme) {
             document.documentElement.classList.toggle('light-theme', theme === 'light');
             const meta = document.querySelector('meta[name="theme-color"]');
             if (meta) meta.setAttribute('content', theme === 'light' ? '#f4f6f7' : '#0b0c10');
         }
 
-        // ============================================================
-        // Favorites helpers
-        // ============================================================
         function getFavorites() {
             try { return JSON.parse(localStorage.getItem(STORAGE.favorites)) || []; }
             catch { return []; }
@@ -921,9 +778,6 @@
             return getFavorites().includes(CURRENT_VIDEO_ID);
         }
 
-        // ============================================================
-        // Update functions
-        // ============================================================
         function updateBadge() {
             const favs = getFavorites();
             if (favs.length > 0) {
@@ -961,9 +815,6 @@
             renderFavorites();
         }
 
-        // ============================================================
-        // Toast
-        // ============================================================
         let toastTimer;
         function showToast(msg, duration = 2400) {
             toastEl.textContent = msg;
@@ -972,9 +823,6 @@
             toastTimer = setTimeout(() => toastEl.classList.remove('show'), duration);
         }
 
-        // ============================================================
-        // Side panel
-        // ============================================================
         function openFavoritesPanel() {
             renderFavorites();
             favoritesPanel.classList.add('open');
@@ -988,9 +836,6 @@
             document.body.classList.remove('panel-open');
         }
 
-        // ============================================================
-        // Render favorites list
-        // ============================================================
         function renderFavorites() {
             const favs = getFavorites();
             const lang = localStorage.getItem(STORAGE.lang) || 'en';
@@ -1039,9 +884,6 @@
             });
         }
 
-        // ============================================================
-        // Toggle favorite (from body button)
-        // ============================================================
         function toggleCurrentFavorite() {
             const lang = localStorage.getItem(STORAGE.lang) || 'en';
             let favs = getFavorites();
@@ -1061,9 +903,6 @@
             renderFavorites();
         }
 
-        // ============================================================
-        // Event listeners
-        // ============================================================
         favBtn.addEventListener('click', toggleCurrentFavorite);
 
         favNavBtn.addEventListener('click', (e) => {
@@ -1111,19 +950,6 @@
             }
         });
 
-        playerPlaceholder.addEventListener('click', () => {
-            if (!streamableFrame.src) {
-                streamableFrame.src = streamableFrame.getAttribute('data-src');
-            }
-            playerPlaceholder.classList.add('hidden');
-            streamableFrame.addEventListener('load', () => {
-                streamableFrame.classList.add('ready');
-            }, { once: true });
-        });
-
-        // ============================================================
-        // INIT
-        // ============================================================
         applyTheme(localStorage.getItem(STORAGE.theme) || 'dark');
         applyLanguage(localStorage.getItem(STORAGE.lang) || 'en');
         updateBadge();

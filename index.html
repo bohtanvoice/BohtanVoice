@@ -469,17 +469,123 @@
             100% { background-position: 0% 50%; }
         }
 
+        /* ============================================================
+           HERO TITLE — каждая буква свой оттенок
+           ============================================================ */
         .hero-title {
-            color: var(--accent);
-            font-size: 3rem;
+            font-size: 3.4rem;
             font-weight: 800;
             letter-spacing: -1px;
             margin: 0 0 15px 0;
             text-align: center;
-            background: linear-gradient(135deg, var(--accent), var(--accent-soft));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            display: inline-block;
+            cursor: pointer;
+            user-select: none;
+            transition: filter 0.3s ease;
+            filter: drop-shadow(0 0 15px rgba(102, 252, 241, 0.25));
+        }
+
+        .hero-title:hover {
+            filter: drop-shadow(0 0 25px rgba(102, 252, 241, 0.45));
+        }
+
+        /* Каждая буква — отдельный span с цветом */
+        .hero-title .letter {
+            display: inline-block;
+            color: var(--accent);
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        /* Плавный оттенок по буквам (имитация градиента) */
+        .hero-title .letter:nth-child(1) { color: #66fcf1; }
+        .hero-title .letter:nth-child(2) { color: #5eebd6; }
+        .hero-title .letter:nth-child(3) { color: #55dac0; }
+        .hero-title .letter:nth-child(4) { color: #4ec9aa; }
+        .hero-title .letter:nth-child(5) { color: #47b894; }
+        .hero-title .letter:nth-child(6) { color: #45a29e; }
+        .hero-title .letter:nth-child(7) { color: #47b894; }
+        .hero-title .letter:nth-child(8) { color: #4ec9aa; }
+        .hero-title .letter:nth-child(9) { color: #55dac0; }
+        .hero-title .letter:nth-child(10) { color: #5eebd6; }
+        .hero-title .letter:nth-child(11) { color: #66fcf1; }
+
+        /* Для светлой темы — тёмные оттенки */
+        html.light-theme .hero-title .letter:nth-child(1) { color: #0e8f86; }
+        html.light-theme .hero-title .letter:nth-child(2) { color: #11887f; }
+        html.light-theme .hero-title .letter:nth-child(3) { color: #148178; }
+        html.light-theme .hero-title .letter:nth-child(4) { color: #167a71; }
+        html.light-theme .hero-title .letter:nth-child(5) { color: #147d75; }
+        html.light-theme .hero-title .letter:nth-child(6) { color: #147d75; }
+        html.light-theme .hero-title .letter:nth-child(7) { color: #167a71; }
+        html.light-theme .hero-title .letter:nth-child(8) { color: #148178; }
+        html.light-theme .hero-title .letter:nth-child(9) { color: #11887f; }
+        html.light-theme .hero-title .letter:nth-child(10) { color: #0e8f86; }
+        html.light-theme .hero-title .letter:nth-child(11) { color: #0e8f86; }
+
+        /* АНИМАЦИЯ РАЗЛЁТА — активируется при клике */
+        .hero-title.explode .letter {
+            animation: letterExplode 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes letterExplode {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 1;
+            }
+            25% {
+                transform: translate(var(--tx), var(--ty)) rotate(var(--rot));
+                opacity: 1;
+            }
+            50% {
+                transform: translate(var(--tx), var(--ty)) rotate(var(--rot));
+                opacity: 0.9;
+            }
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        /* ============================================================
+           SOUND WAVE — статичная, оживает при клике
+           ============================================================ */
+        .sound-wave {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            height: 24px;
+            margin: 0 auto 20px auto;
+        }
+
+        .sound-wave span {
+            display: block;
+            width: 4px;
+            background: var(--accent);
+            border-radius: 3px;
+            height: 12px;
+            box-shadow: 0 0 8px rgba(102, 252, 241, 0.4);
+            transition: height 0.3s ease;
+        }
+
+        /* Когда волна "активна" — прыгает */
+        .sound-wave.active span {
+            animation: waveBounce 0.6s ease-in-out infinite;
+        }
+
+        .sound-wave.active span:nth-child(1) { animation-delay: 0s; }
+        .sound-wave.active span:nth-child(2) { animation-delay: 0.1s; }
+        .sound-wave.active span:nth-child(3) { animation-delay: 0.2s; }
+        .sound-wave.active span:nth-child(4) { animation-delay: 0.3s; }
+        .sound-wave.active span:nth-child(5) { animation-delay: 0.15s; }
+        .sound-wave.active span:nth-child(6) { animation-delay: 0.25s; }
+        .sound-wave.active span:nth-child(7) { animation-delay: 0.4s; }
+        .sound-wave.active span:nth-child(8) { animation-delay: 0.2s; }
+        .sound-wave.active span:nth-child(9) { animation-delay: 0.05s; }
+
+        @keyframes waveBounce {
+            0%, 100% { height: 8px; opacity: 0.6; }
+            50% { height: 22px; opacity: 1; }
         }
 
         header p { color: var(--accent-soft); font-size: 1.05rem; font-weight: 500; padding: 0 10px; }
@@ -862,7 +968,9 @@
         @media(max-width: 600px) {
             nav { padding: 10px 15px; }
             header { padding-top: 95px; }
-            .hero-title { font-size: 2.2rem; }
+            .hero-title { font-size: 2.4rem; }
+            .sound-wave { height: 18px; gap: 4px; }
+            .sound-wave span { width: 3px; }
             .logo-text { display: none; }
             .back-to-top {
                 bottom: 16px; right: 16px;
@@ -911,7 +1019,12 @@
     </nav>
 
     <header>
-        <h1 class="hero-title">BohtanVoice</h1>
+        <h1 class="hero-title" id="heroTitle" aria-label="BohtanVoice"></h1>
+        <div class="sound-wave" id="soundWave" aria-hidden="true">
+            <span></span><span></span><span></span>
+            <span></span><span></span><span></span>
+            <span></span><span></span><span></span>
+        </div>
         <p data-en="Animation Voiceover Studio in the Bohtan Dialect" data-ru="Студия озвучивания мультфильмов на диалекте Bohtan">Animation Voiceover Studio in the Bohtan Dialect</p>
     </header>
 
@@ -1417,6 +1530,64 @@
 
         backToTop.addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ============================================================
+        // HERO — разбиваем на буквы + клик → разлёт + волна оживает
+        // ============================================================
+        const heroTitle = document.getElementById('heroTitle');
+        const soundWave = document.getElementById('soundWave');
+        const titleText = 'BohtanVoice';
+
+        // Создаём буквы
+        titleText.split('').forEach((char, i) => {
+            const span = document.createElement('span');
+            span.className = 'letter';
+            span.textContent = char;
+            heroTitle.appendChild(span);
+        });
+
+        let isAnimating = false;
+
+        heroTitle.addEventListener('click', () => {
+            if (isAnimating) return;
+            isAnimating = true;
+
+            // Каждой букве — своё направление разлёта
+            const letters = heroTitle.querySelectorAll('.letter');
+            letters.forEach((letter, i) => {
+                // Случайные направления
+                const angle = (Math.random() * Math.PI * 2);
+                const distance = 80 + Math.random() * 100;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance - 30;
+                const rot = (Math.random() - 0.5) * 720;
+
+                letter.style.setProperty('--tx', tx + 'px');
+                letter.style.setProperty('--ty', ty + 'px');
+                letter.style.setProperty('--rot', rot + 'deg');
+                letter.style.animationDelay = (i * 0.03) + 's';
+            });
+
+            // Запускаем анимацию
+            heroTitle.classList.add('explode');
+
+            // Оживляем волну
+            soundWave.classList.add('active');
+
+            // Через 1.8 секунды — убираем
+            setTimeout(() => {
+                heroTitle.classList.remove('explode');
+                letters.forEach(letter => {
+                    letter.style.animationDelay = '';
+                });
+                isAnimating = false;
+            }, 1800);
+
+            // Волна затихает через 2.5 секунды
+            setTimeout(() => {
+                soundWave.classList.remove('active');
+            }, 2500);
         });
     </script>
 

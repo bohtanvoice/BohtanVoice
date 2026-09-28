@@ -81,14 +81,20 @@
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             text-decoration: none;
         }
 
         .site-logo {
-            height: 45px;
-            width: 45px;
+            height: 55px;
+            width: 55px;
             object-fit: contain;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .logo-container:hover .site-logo {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 8px var(--accent));
         }
 
         .logo-text {
@@ -201,7 +207,7 @@
         .container {
             max-width: 900px;
             margin: 0 auto;
-            padding: 105px 20px 60px 20px;
+            padding: 115px 20px 60px 20px;
         }
 
         .back-link {
@@ -347,10 +353,11 @@
 
         @media (max-width: 600px) {
             nav { padding: 10px 15px; }
-            .container { padding: 95px 15px 40px 15px; }
+            .container { padding: 105px 15px 40px 15px; }
             .page-title { font-size: 1.5rem; }
             .page-intro { padding: 18px; font-size: 0.95rem; }
             .sample-heading { font-size: 1.1rem; }
+            .logo-text { display: none; }
             .back-to-top {
                 bottom: 16px; right: 16px;
                 width: 44px; height: 44px;
@@ -398,7 +405,7 @@
         <div class="page-intro"
              data-en="Our first experience in voiceover. It was with these short excerpts that the BohtanVoice studio began — a journey we continue today."
              data-ru="Наш первый опыт в озвучке. Именно с этих коротких отрывков началась студия BohtanVoice — путь, который мы продолжаем сегодня.">
-            Наш первый опыт в озвучке. Именно с этих коротких отрывков началась студия BohtanVoice — путь, который мы продолжаем сегодня.
+            Our first experience in voiceover. It was with these short excerpts that the BohtanVoice studio began — a journey we continue today.
         </div>
 
         <section class="sample-section">
@@ -414,7 +421,7 @@
             <p class="sample-description"
                data-en="A short excerpt from Zootopia, dubbed as our very first experiment in the Bohtan dialect."
                data-ru="Короткий отрывок из «Зверополиса», озвученный как самый первый наш эксперимент на диалекте Bohtan.">
-                Короткий отрывок из «Зверополиса», озвученный как самый первый наш эксперимент на диалекте Bohtan.
+                A short excerpt from Zootopia, dubbed as our very first experiment in the Bohtan dialect.
             </p>
         </section>
 
@@ -431,7 +438,7 @@
             <p class="sample-description"
                data-en="A short excerpt from Shrek — another early experiment that shaped our approach to dubbing."
                data-ru="Короткий отрывок из «Шрека» — ещё один ранний эксперимент, который сформировал наш подход к озвучке.">
-                Короткий отрывок из «Шрека» — ещё один ранний эксперимент, который сформировал наш подход к озвучке.
+                A short excerpt from Shrek — another early experiment that shaped our approach to dubbing.
             </p>
         </section>
 
@@ -499,14 +506,11 @@
         }
 
         window.addEventListener('scroll', toggleBackToTop, { passive: true });
-        toggleToBackToTop();
         toggleBackToTop();
 
         backToTop.addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
-
-        function toggleToBackToTop() {} /* noop, just in case */
     </script>
 
 </body>

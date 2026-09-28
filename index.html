@@ -89,14 +89,20 @@
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             text-decoration: none;
         }
 
         .site-logo {
-            height: 45px;
-            width: 45px;
+            height: 55px;
+            width: 55px;
             object-fit: contain;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .logo-container:hover .site-logo {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 8px var(--accent));
         }
 
         .logo-text {
@@ -452,7 +458,7 @@
             background: linear-gradient(135deg, var(--bg-panel), var(--bg-main), var(--bg-panel));
             background-size: 200% 200%;
             animation: gradientMove 12s ease infinite;
-            padding: 85px 20px 40px 20px;
+            padding: 100px 20px 40px 20px;
             text-align: center;
             border-bottom: 1px solid var(--bg-panel);
         }
@@ -857,6 +863,7 @@
             nav { padding: 10px 15px; }
             header { padding-top: 95px; }
             .hero-title { font-size: 2.2rem; }
+            .logo-text { display: none; }
             .back-to-top {
                 bottom: 16px; right: 16px;
                 width: 44px; height: 44px;
@@ -941,8 +948,8 @@
                     <div class="play-overlay"><span></span></div>
                 </div>
                 <div class="poster-info">
-    <h3 data-en="Three Bogatyrs and the Princess of Egypt" data-ru="Три богатыря и Принцесса Египта">Three Bogatyrs and the Princess of Egypt</h3>
-</div>
+                    <h3 data-en="Three Bogatyrs and the Princess of Egypt" data-ru="Три богатыря и Принцесса Египта">Three Bogatyrs and the Princess of Egypt</h3>
+                </div>
             </a>
 
         </div>

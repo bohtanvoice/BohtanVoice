@@ -28,11 +28,7 @@
             --skeleton-shine: #f0f3f5;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         html {
             scroll-behavior: smooth;
@@ -220,7 +216,7 @@
             border: 1px solid var(--accent-soft);
             border-radius: 8px;
             padding: 10px;
-            min-width: 160px;
+            min-width: 180px;
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
             opacity: 0;
             transform: translateY(-8px);
@@ -770,27 +766,9 @@
 
         .poster-info h3 {
             color: var(--accent);
-            font-size: 1.1rem;
+            font-size: 1.05rem;
+            line-height: 1.3;
         }
-
-        .coming-soon {
-            background-color: var(--bg-panel);
-            border: 1px dashed var(--accent-soft);
-            border-radius: 12px;
-            padding: 25px;
-            text-align: center;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-
-        .coming-soon.revealed {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .coming-soon h3 { color: var(--accent); font-size: 1.2rem; margin-bottom: 8px; }
-        .coming-soon p { color: var(--text-main); font-size: 0.95rem; }
 
         footer {
             text-align: center;
@@ -920,6 +898,7 @@
         <ul class="nav-links" id="navLinks">
             <li><a href="#" id="aboutLink" data-en="About Us" data-ru="О нас">About Us</a></li>
             <li><a href="#" id="projectLink" data-en="About the Project" data-ru="О проекте">About the Project</a></li>
+            <li><a href="samples.html" data-en="Our First Experience" data-ru="Наш первый опыт">Our First Experience</a></li>
             <li><a href="#contacts" data-en="Contacts" data-ru="Контакты">Contacts</a></li>
         </ul>
     </nav>
@@ -931,7 +910,7 @@
 
     <div class="container">
 
-        <h2 id="projects" class="section-title" data-en="Our Dubs" data-ru="Наши озвучки">Our Dubs</h2>
+        <h2 id="projects" class="section-title" data-en="Coming Soon" data-ru="Скоро на сайте">Coming Soon</h2>
 
         <div class="search-wrapper">
             <input
@@ -951,9 +930,9 @@
 
         <div class="projects-grid" id="projectsGrid">
 
-            <a href="video1.html" class="poster-card" data-search="zootopia зверополис latest release последний релиз bohtan" data-video-id="video1">
+            <a href="video1.html" class="poster-card" data-search="три богатыря и принцесса египта princess of egypt богатыри" data-video-id="video1">
                 <div class="poster-image-box">
-                    <img src="poster1.jpg" alt="Zootopia poster" fetchpriority="high">
+                    <img src="poster1.jpg" alt="Три богатыря и Принцесса Египта poster" fetchpriority="high">
                     <button class="fav-toggle" data-fav-id="video1" aria-label="Add to favorites">
                         <svg viewBox="0 0 24 24">
                             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
@@ -962,23 +941,8 @@
                     <div class="play-overlay"><span></span></div>
                 </div>
                 <div class="poster-info">
-                    <h3>Zootopia</h3>
-                </div>
-            </a>
-
-            <a href="video2.html" class="poster-card" data-search="shrek шрек adaptation адаптация bohtan" data-video-id="video2">
-                <div class="poster-image-box">
-                    <img src="poster2.jpg" alt="Shrek poster" loading="lazy">
-                    <button class="fav-toggle" data-fav-id="video2" aria-label="Add to favorites">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                        </svg>
-                    </button>
-                    <div class="play-overlay"><span></span></div>
-                </div>
-                <div class="poster-info">
-                    <h3>Shrek</h3>
-                </div>
+    <h3 data-en="Three Bogatyrs and the Princess of Egypt" data-ru="Три богатыря и Принцесса Египта">Three Bogatyrs and the Princess of Egypt</h3>
+</div>
             </a>
 
         </div>
@@ -986,12 +950,6 @@
         <div class="no-results" id="noResults">
             <span class="no-results-emoji">🔍</span>
             <span data-en="Nothing found. Try another search." data-ru="Ничего не найдено. Попробуйте другой запрос.">Nothing found. Try another search.</span>
-        </div>
-
-        <h2 class="section-title" data-en="Coming Soon" data-ru="Скоро на сайте">Coming Soon</h2>
-        <div class="coming-soon">
-            <h3 data-en="🎬 New dubs are in the works" data-ru="🎬 Готовим новые озвучки">🎬 New dubs are in the works</h3>
-            <p data-en="We're currently working on new animation dubs in the Bohtan dialect. Stay tuned!" data-ru="Сейчас работаем над новыми озвучками мультфильмов на диалекте Bohtan. Следите за обновлениями!">We're currently working on new animation dubs in the Bohtan dialect. Stay tuned!</p>
         </div>
 
     </div>
@@ -1356,7 +1314,7 @@
         applyFavStateOnPosters();
         renderFavorites();
 
-        const revealEls = document.querySelectorAll('.poster-card, .coming-soon');
+        const revealEls = document.querySelectorAll('.poster-card');
 
         if ('IntersectionObserver' in window) {
             const observer = new IntersectionObserver((entries) => {

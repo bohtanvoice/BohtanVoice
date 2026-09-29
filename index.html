@@ -6,453 +6,19 @@
     <meta name="description" content="BohtanVoice — Animation Voiceover Studio in the Bohtan dialect.">
     <meta name="theme-color" content="#0b0c10">
     <link rel="icon" href="logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
     <title>BohtanVoice — Animation Voiceover Studio</title>
+
     <style>
-        :root {
-            --bg-main: #0b0c10;
-            --bg-panel: #1f2833;
-            --accent: #66fcf1;
-            --accent-soft: #45a29e;
-            --text-main: #c5c6c7;
-            --skeleton: #1f2833;
-            --skeleton-shine: #2c3844;
-        }
-
-        html.light-theme {
-            --bg-main: #f4f6f7;
-            --bg-panel: #ffffff;
-            --accent: #0e8f86;
-            --accent-soft: #147d75;
-            --text-main: #2b2f33;
-            --skeleton: #e4e8ea;
-            --skeleton-shine: #f0f3f5;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html {
-            scroll-behavior: smooth;
-            scrollbar-width: thin;
-            scrollbar-color: var(--accent-soft) transparent;
-        }
-
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent-soft);
-            border-radius: 8px;
-        }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-
-        @media (max-width: 768px) {
-            ::-webkit-scrollbar { width: 0px; height: 0px; }
-            html { scrollbar-width: none; -ms-overflow-style: none; }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            animation: fadeIn 0.8s ease-out;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        body.panel-open { overflow: hidden; }
-
-        nav {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%;
-            background-color: #0b0c10;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 20px;
-            border-bottom: 1px solid rgba(31, 40, 51, 0.8);
-            z-index: 1000;
-            flex-wrap: wrap;
-            gap: 10px;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-
-        html.light-theme nav {
-            background-color: #f4f6f7;
-            border-bottom: 1px solid rgba(14, 143, 134, 0.25);
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-        }
-
-        .site-logo {
-            height: 55px;
-            width: 55px;
-            object-fit: contain;
-            transition: transform 0.3s ease, filter 0.3s ease;
-        }
-
-        .logo-container:hover .site-logo {
-            transform: scale(1.05);
-            filter: drop-shadow(0 0 8px var(--accent));
-        }
-
-        .logo-text {
-            color: var(--accent);
-            font-weight: 700;
-            font-size: 1.15rem;
-            letter-spacing: 0.5px;
-        }
-
-        .nav-actions { display: flex; align-items: center; gap: 8px; }
-
-        .icon-btn {
-            width: 36px; height: 36px;
-            background: none;
-            border: 1px solid var(--accent-soft);
-            border-radius: 8px;
-            color: var(--accent);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.25s ease;
-            padding: 0;
-            position: relative;
-        }
-
-        .icon-btn:hover {
-            border-color: var(--accent);
-            background-color: rgba(102, 252, 241, 0.08);
-        }
-
-        .icon-btn svg {
-            width: 18px; height: 18px;
-            stroke: currentColor;
-            fill: none;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        #settingsBtn:hover { transform: rotate(30deg); }
-
-        #favoritesBtn svg {
-            transition: fill 0.25s ease, stroke 0.25s ease, transform 0.25s ease;
-            transform-origin: center;
-        }
-
-        #favoritesBtn:hover svg {
-            fill: var(--accent);
-            transform: scale(1.18);
-            animation: heartBeat 0.9s ease-in-out infinite;
-        }
-
-        #favoritesBtn.has-items svg { fill: var(--accent); }
-        #favoritesBtn.has-items:hover svg { fill: #ff4d6d; stroke: #ff4d6d; }
-        #favoritesBtn:active svg { transform: scale(0.9); animation: none; }
-
-        @keyframes heartBeat {
-            0%   { transform: scale(1.18); }
-            15%  { transform: scale(1.28); }
-            30%  { transform: scale(1.18); }
-            45%  { transform: scale(1.25); }
-            60%  { transform: scale(1.18); }
-            100% { transform: scale(1.18); }
-        }
-
-        .fav-badge {
-            position: absolute;
-            top: -4px; right: -4px;
-            background-color: var(--accent);
-            color: var(--bg-main);
-            font-size: 0.65rem;
-            font-weight: 700;
-            border-radius: 10px;
-            padding: 1px 5px;
-            min-width: 16px;
-            text-align: center;
-            line-height: 1.3;
-            display: none;
-        }
-
-        .fav-badge.visible { display: block; }
-
-        .menu-toggle {
-            width: 36px; height: 36px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .menu-toggle span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background-color: var(--accent);
-            transition: transform 0.3s ease, opacity 0.3s ease;
-        }
-
-        .menu-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        .menu-toggle.open span:nth-child(2) { opacity: 0; }
-        .menu-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-        .nav-links {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            position: absolute;
-            top: 100%;
-            right: 20px;
-            background-color: var(--bg-panel);
-            border: 1px solid var(--accent-soft);
-            border-radius: 8px;
-            padding: 10px;
-            min-width: 180px;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-            opacity: 0;
-            transform: translateY(-8px);
-            pointer-events: none;
-            transition: opacity 0.25s ease, transform 0.25s ease;
-        }
-
-        .nav-links.open {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-
-        .nav-links a {
-            color: var(--text-main);
-            text-decoration: none;
-            transition: color 0.3s ease;
-            font-size: 0.9rem;
-            font-weight: 500;
-            padding: 8px 10px;
-            border-radius: 5px;
-            display: block;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent);
-            background-color: rgba(102, 252, 241, 0.08);
-        }
-
-        .about-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(11, 12, 16, 0.6);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.35s ease;
-            z-index: 1998;
-        }
-
-        .about-overlay.open { opacity: 1; pointer-events: auto; }
-
-        .about-panel {
-            position: fixed;
-            top: 0; right: 0;
-            width: 320px;
-            max-width: 85%;
-            height: 100%;
-            background-color: var(--bg-panel);
-            border-left: 2px solid var(--accent-soft);
-            box-shadow: none;
-            padding: 90px 25px 25px 25px;
-            transform: translateX(100%);
-            transition: transform 0.35s cubic-bezier(0.165, 0.84, 0.44, 1), background-color 0.3s ease;
-            z-index: 1999;
-            overflow-y: auto;
-        }
-
-        .about-panel.open {
-            transform: translateX(0);
-            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .about-panel h2 {
-            color: var(--accent);
-            font-size: 1.4rem;
-            margin-bottom: 15px;
-        }
-
-        .about-panel p { font-size: 0.95rem; color: var(--text-main); line-height: 1.6; }
-
-        .about-close {
-            position: absolute;
-            top: 20px; right: 20px;
-            background: none;
-            border: none;
-            color: var(--accent);
-            font-size: 1.5rem;
-            cursor: pointer;
-            line-height: 1;
-        }
-
-        .setting-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 0;
-            border-bottom: 1px solid rgba(102, 252, 241, 0.15);
-        }
-
-        .setting-row:last-child { border-bottom: none; }
-        .setting-label { font-size: 0.95rem; color: var(--text-main); }
-
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 44px;
-            height: 24px;
-            flex-shrink: 0;
-        }
-
-        .switch input { opacity: 0; width: 0; height: 0; }
-
-        .switch-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(197, 198, 199, 0.25);
-            border: 1px solid var(--accent-soft);
-            transition: 0.3s;
-            border-radius: 24px;
-        }
-
-        .switch-slider::before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 3px;
-            bottom: 2px;
-            background-color: var(--accent-soft);
-            transition: 0.3s;
-            border-radius: 50%;
-        }
-
-        .switch input:checked + .switch-slider {
-            background-color: rgba(102, 252, 241, 0.25);
-        }
-
-        .switch input:checked + .switch-slider::before {
-            transform: translateX(20px);
-            background-color: var(--accent);
-        }
-
-        .lang-toggle { display: flex; gap: 6px; }
-
-        .lang-btn {
-            background: none;
-            border: 1px solid var(--accent-soft);
-            color: var(--text-main);
-            padding: 5px 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.25s ease;
-        }
-
-        .lang-btn.active {
-            background-color: var(--accent);
-            color: var(--bg-main);
-            border-color: var(--accent);
-            font-weight: 600;
-        }
-
-        .fav-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .fav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px;
-            background-color: var(--bg-main);
-            border: 1px solid var(--accent-soft);
-            border-radius: 10px;
-            text-decoration: none;
-            color: inherit;
-            transition: all 0.25s ease;
-        }
-
-        .fav-item:hover {
-            border-color: var(--accent);
-            transform: translateX(3px);
-            box-shadow: 0 6px 18px rgba(102, 252, 241, 0.12);
-        }
-
-        .fav-item-thumb {
-            width: 42px;
-            height: 56px;
-            border-radius: 6px;
-            object-fit: cover;
-            flex-shrink: 0;
-            background-color: var(--bg-panel);
-        }
-
-        .fav-item-title {
-            font-size: 0.9rem;
-            color: var(--accent);
-            font-weight: 600;
-            flex-grow: 1;
-            line-height: 1.3;
-        }
-
-        .fav-item-remove {
-            background: none;
-            border: none;
-            color: var(--accent-soft);
-            cursor: pointer;
-            font-size: 1.3rem;
-            line-height: 1;
-            padding: 2px 6px;
-            border-radius: 5px;
-            transition: all 0.2s ease;
-            flex-shrink: 0;
-        }
-
-        .fav-item-remove:hover {
-            color: #ff6b6b;
-            background-color: rgba(255, 107, 107, 0.1);
-        }
-
-        .fav-empty {
-            text-align: center;
-            padding: 30px 10px;
-            color: var(--accent-soft);
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-
-        .fav-empty-icon {
-            font-size: 2.5rem;
-            display: block;
-            margin-bottom: 12px;
-            opacity: 0.5;
-        }
+        /* ============================================================
+           Стили, уникальные для главной страницы
+           ============================================================ */
 
         header {
             background: linear-gradient(135deg, var(--bg-panel), var(--bg-main), var(--bg-panel));
@@ -469,13 +35,11 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* ============================================================
-           HERO TITLE
-           ============================================================ */
         .hero-title {
-            font-size: 3.4rem;
-            font-weight: 800;
-            letter-spacing: -1px;
+            font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+            font-size: calc(3.6rem * var(--font-scale));
+            font-weight: 700;
+            letter-spacing: -1.5px;
             margin: 0 0 15px 0;
             text-align: center;
             display: inline-block;
@@ -491,11 +55,9 @@
 
         .hero-title .letter {
             display: inline-block;
-            color: var(--accent);
             transition: color 0.3s ease;
         }
 
-        /* Тёмная тема — плавный переход оттенков */
         .hero-title .letter:nth-child(1)  { color: #66fcf1; }
         .hero-title .letter:nth-child(2)  { color: #63f5e8; }
         .hero-title .letter:nth-child(3)  { color: #60eede; }
@@ -508,7 +70,6 @@
         .hero-title .letter:nth-child(10) { color: #45a29e; }
         .hero-title .letter:nth-child(11) { color: #4ab8a3; }
 
-        /* Светлая тема */
         html.light-theme .hero-title .letter:nth-child(1)  { color: #0e8f86; }
         html.light-theme .hero-title .letter:nth-child(2)  { color: #10887f; }
         html.light-theme .hero-title .letter:nth-child(3)  { color: #128278; }
@@ -521,7 +82,6 @@
         html.light-theme .hero-title .letter:nth-child(10) { color: #147d75; }
         html.light-theme .hero-title .letter:nth-child(11) { color: #0e8f86; }
 
-        /* Анимация волны по тексту — ВЫШЕ + ДОЛЬШЕ */
         .hero-title.wave-active .letter {
             animation: letterWave 1.1s ease-in-out;
         }
@@ -532,9 +92,6 @@
             100% { transform: translateY(0); }
         }
 
-        /* ============================================================
-           SOUND WAVE (не трогаем, но обновлено height)
-           ============================================================ */
         .sound-wave {
             display: flex;
             justify-content: center;
@@ -573,95 +130,25 @@
             50% { height: 34px; opacity: 1; }
         }
 
-        header p { color: var(--accent-soft); font-size: 1.05rem; font-weight: 500; padding: 0 10px; }
+        header p {
+            color: var(--accent-soft);
+            font-size: calc(1.05rem * var(--font-scale));
+            font-weight: 500;
+            padding: 0 10px;
+        }
 
         .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
 
         .section-title {
             color: var(--accent);
-            font-size: 1.6rem;
+            font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+            font-weight: 600;
+            font-size: calc(1.6rem * var(--font-scale));
             margin-bottom: 20px;
             border-left: 4px solid var(--accent);
             padding-left: 10px;
             margin-top: 40px;
         }
-
-        .search-wrapper {
-            margin: 0 0 25px;
-            position: relative;
-            max-width: 480px;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 12px 44px 12px 44px;
-            background-color: var(--bg-panel);
-            border: 1px solid var(--accent-soft);
-            border-radius: 10px;
-            color: var(--text-main);
-            font-size: 0.95rem;
-            font-family: inherit;
-            transition: all 0.25s ease;
-            outline: none;
-        }
-
-        .search-input::placeholder {
-            color: var(--accent-soft);
-            opacity: 0.7;
-        }
-
-        .search-input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(102, 252, 241, 0.15);
-        }
-
-        html.light-theme .search-input:focus {
-            box-shadow: 0 0 0 3px rgba(14, 143, 134, 0.15);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 18px;
-            height: 18px;
-            stroke: var(--accent-soft);
-            fill: none;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            pointer-events: none;
-            transition: stroke 0.25s ease;
-        }
-
-        .search-input:focus ~ .search-icon {
-            stroke: var(--accent);
-        }
-
-        .search-clear {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--accent-soft);
-            cursor: pointer;
-            font-size: 1.3rem;
-            line-height: 1;
-            padding: 4px 8px;
-            border-radius: 5px;
-            display: none;
-            transition: all 0.2s ease;
-        }
-
-        .search-clear:hover {
-            color: var(--accent);
-            background-color: rgba(102, 252, 241, 0.08);
-        }
-
-        .search-clear.visible { display: block; }
 
         .no-results {
             display: none;
@@ -688,7 +175,24 @@
             grid-template-columns: repeat(auto-fit, minmax(180px, 220px));
             gap: 20px;
             justify-content: start;
+            transition: all 0.3s ease;
         }
+
+        html.density-compact .projects-grid {
+            grid-template-columns: repeat(auto-fit, minmax(150px, 180px));
+            gap: 14px;
+        }
+
+        html.density-compact .poster-info { padding: 10px; }
+        html.density-compact .poster-info h3 { font-size: calc(0.95rem * var(--font-scale)); }
+
+        html.density-comfortable .projects-grid {
+            grid-template-columns: repeat(auto-fit, minmax(210px, 260px));
+            gap: 28px;
+        }
+
+        html.density-comfortable .poster-info { padding: 18px; }
+        html.density-comfortable .poster-info h3 { font-size: calc(1.2rem * var(--font-scale)); }
 
         .poster-card {
             display: block;
@@ -863,110 +367,21 @@
 
         .poster-info h3 {
             color: var(--accent);
-            font-size: 1.05rem;
+            font-size: calc(1.05rem * var(--font-scale));
             line-height: 1.3;
         }
 
-        footer {
-            text-align: center;
-            padding: 30px;
-            background-color: var(--bg-main);
-            color: var(--accent-soft);
-            border-top: 1px solid var(--bg-panel);
-            font-size: 0.85rem;
-            margin-top: 60px;
-        }
-
-        .back-to-top {
-            position: fixed;
-            bottom: 24px; right: 24px;
-            width: 48px; height: 48px;
-            border-radius: 50%;
-            background-color: var(--bg-panel);
-            border: 1px solid var(--accent-soft);
-            color: var(--accent);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transform: translateY(20px) scale(0.9);
-            pointer-events: none;
-            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-            z-index: 900;
-        }
-
-        .back-to-top.visible {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            pointer-events: auto;
-        }
-
-        .back-to-top:hover {
-            background-color: var(--accent);
-            color: var(--bg-main);
-            border-color: var(--accent);
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 12px 30px rgba(102, 252, 241, 0.35);
-        }
-
-        .back-to-top svg {
-            width: 22px; height: 22px;
-            stroke: currentColor;
-            fill: none;
-            stroke-width: 2.5;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            background: var(--bg-panel);
-            color: var(--text-main);
-            border: 1px solid var(--accent);
-            border-radius: 10px;
-            padding: 12px 20px;
-            font-size: 0.9rem;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            z-index: 3000;
-            max-width: 90%;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .toast-icon { font-size: 1.1rem; line-height: 1; }
-
         @media(max-width: 600px) {
-            nav { padding: 10px 15px; }
             header { padding-top: 95px; }
-            .hero-title { font-size: 2.4rem; }
+            .hero-title { font-size: calc(2.4rem * var(--font-scale)); letter-spacing: -1px; }
             .sound-wave { height: 32px; gap: 4px; }
             .sound-wave span { width: 3px; }
-            .logo-text { display: none; }
-            .back-to-top {
-                bottom: 16px; right: 16px;
-                width: 44px; height: 44px;
-            }
-            .toast { bottom: 80px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- ================= NAV ================= -->
     <nav>
         <a href="index.html" class="logo-container">
             <img src="logo.png" alt="BohtanVoice" class="site-logo">
@@ -974,6 +389,13 @@
         </a>
 
         <div class="nav-actions">
+            <button class="icon-btn" id="searchNavBtn" aria-label="Search">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </button>
+
             <button class="icon-btn" id="favoritesBtn" aria-label="Favorites">
                 <svg viewBox="0 0 24 24">
                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
@@ -1003,6 +425,27 @@
         </ul>
     </nav>
 
+    <!-- Раскрывающийся поиск -->
+    <div class="nav-search-wrap" id="navSearchWrap">
+        <div class="nav-search-box">
+            <svg class="nav-search-icon" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input
+                type="text"
+                class="nav-search-input"
+                id="navSearchInput"
+                placeholder="Search dubs…"
+                data-en-placeholder="Search dubs…"
+                data-ru-placeholder="Поиск озвучек…"
+                autocomplete="off">
+            <button class="nav-search-clear" id="navSearchClear" aria-label="Clear">&times;</button>
+        </div>
+        <div class="nav-search-results" id="navSearchResults"></div>
+    </div>
+
+    <!-- ================= HEADER ================= -->
     <header>
         <h1 class="hero-title" id="heroTitle" aria-label="BohtanVoice"></h1>
         <div class="sound-wave" id="soundWave" aria-hidden="true">
@@ -1013,44 +456,12 @@
         <p data-en="Animation Voiceover Studio in the Bohtan Dialect" data-ru="Студия озвучивания мультфильмов на диалекте Bohtan">Animation Voiceover Studio in the Bohtan Dialect</p>
     </header>
 
+    <!-- ================= CONTENT ================= -->
     <div class="container">
 
         <h2 id="projects" class="section-title" data-en="Coming Soon" data-ru="Скоро на сайте">Coming Soon</h2>
 
-        <div class="search-wrapper">
-            <input
-                type="text"
-                class="search-input"
-                id="searchInput"
-                placeholder="Search dubs…"
-                data-en-placeholder="Search dubs…"
-                data-ru-placeholder="Поиск озвучек…"
-                autocomplete="off">
-            <svg class="search-icon" viewBox="0 0 24 24">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <button class="search-clear" id="searchClear" aria-label="Clear">&times;</button>
-        </div>
-
-        <div class="projects-grid" id="projectsGrid">
-
-            <a href="video1.html" class="poster-card" data-search="три богатыря и принцесса египта princess of egypt богатыри" data-video-id="video1">
-                <div class="poster-image-box">
-                    <img src="poster1.jpg" alt="Три богатыря и Принцесса Египта poster" fetchpriority="high">
-                    <button class="fav-toggle" data-fav-id="video1" aria-label="Add to favorites">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                        </svg>
-                    </button>
-                    <div class="play-overlay"><span></span></div>
-                </div>
-                <div class="poster-info">
-                    <h3 data-en="Three Bogatyrs and the Princess of Egypt" data-ru="Три богатыря и Принцесса Египта">Three Bogatyrs and the Princess of Egypt</h3>
-                </div>
-            </a>
-
-        </div>
+        <div class="projects-grid" id="projectsGrid"></div>
 
         <div class="no-results" id="noResults">
             <span class="no-results-emoji">🔍</span>
@@ -1059,10 +470,12 @@
 
     </div>
 
+    <!-- ================= FOOTER ================= -->
     <footer>
         <p>&copy; 2026 BohtanVoice. All rights reserved.</p>
     </footer>
 
+    <!-- ================= PANELS ================= -->
     <div class="about-overlay" id="aboutOverlay"></div>
     <div class="about-panel" id="aboutPanel">
         <button class="about-close" id="aboutClose">&times;</button>
@@ -1087,11 +500,12 @@
         <h2 data-en="Settings" data-ru="Настройки">Settings</h2>
 
         <div class="setting-row">
-            <span class="setting-label" data-en="Dark theme" data-ru="Тёмная тема">Dark theme</span>
-            <label class="switch">
-                <input type="checkbox" id="themeSwitch">
-                <span class="switch-slider"></span>
-            </label>
+            <span class="setting-label" data-en="Theme" data-ru="Тема">Theme</span>
+            <div class="lang-toggle" id="themeToggle">
+                <button class="lang-btn" data-theme="auto" data-en="Auto" data-ru="Авто">Auto</button>
+                <button class="lang-btn" data-theme="light" data-en="Light" data-ru="Светлая">Light</button>
+                <button class="lang-btn" data-theme="dark" data-en="Dark" data-ru="Тёмная">Dark</button>
+            </div>
         </div>
 
         <div class="setting-row">
@@ -1100,6 +514,49 @@
                 <button class="lang-btn" id="langEn">EN</button>
                 <button class="lang-btn" id="langRu">RU</button>
             </div>
+        </div>
+
+        <div class="setting-row">
+            <span class="setting-label" data-en="Font size" data-ru="Размер шрифта">Font size</span>
+            <div class="lang-toggle" id="fontSizeToggle">
+                <button class="lang-btn size-btn" data-size="small">A</button>
+                <button class="lang-btn size-btn" data-size="normal">A</button>
+                <button class="lang-btn size-btn" data-size="large">A</button>
+            </div>
+        </div>
+
+        <div class="setting-row">
+            <span class="setting-label" data-en="Density" data-ru="Плотность">Density</span>
+            <div class="lang-toggle" id="densityToggle">
+                <button class="lang-btn density-btn" data-density="compact" aria-label="Compact">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="8" height="8" rx="1.5"/>
+                        <rect x="13" y="3" width="8" height="8" rx="1.5"/>
+                        <rect x="3" y="13" width="8" height="8" rx="1.5"/>
+                        <rect x="13" y="13" width="8" height="8" rx="1.5"/>
+                    </svg>
+                </button>
+                <button class="lang-btn density-btn" data-density="normal" aria-label="Normal">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="8" height="18" rx="1.5"/>
+                        <rect x="13" y="3" width="8" height="18" rx="1.5"/>
+                    </svg>
+                </button>
+                <button class="lang-btn density-btn" data-density="comfortable" aria-label="Comfortable">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="8" rx="1.5"/>
+                        <rect x="3" y="13" width="18" height="8" rx="1.5"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="setting-row">
+            <span class="setting-label" data-en="Auto animation" data-ru="Анимация при входе">Auto animation</span>
+            <label class="switch">
+                <input type="checkbox" id="autowaveSwitch" checked>
+                <span class="switch-slider"></span>
+            </label>
         </div>
     </div>
 
@@ -1116,448 +573,159 @@
         </div>
     </div>
 
+    <!-- ================= BACK TO TOP ================= -->
     <button class="back-to-top" id="backToTop" aria-label="Back to top">
         <svg viewBox="0 0 24 24">
             <polyline points="18 15 12 9 6 15"></polyline>
         </svg>
     </button>
 
+    <!-- ================= TOAST ================= -->
     <div class="toast" id="toast">
         <span class="toast-icon" id="toastIcon">✓</span>
         <span id="toastText"></span>
     </div>
 
+    <!-- ================= SCRIPTS ================= -->
+    <script src="videos.js"></script>
+    <script src="app.js"></script>
+
     <script>
-        const STORAGE = {
-            theme: 'bv_theme',
-            lang: 'bv_lang',
-            favorites: 'bv_favorites'
-        };
+        /* ============================================================
+           Логика, уникальная для главной страницы
+           ============================================================ */
 
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
+        /* ---------- Построение сетки постеров из ALL_VIDEOS ---------- */
+        function buildProjectsGrid() {
+            const grid = document.getElementById('projectsGrid');
+            const lang = getLang();
+            grid.innerHTML = '';
 
-        menuToggle.addEventListener('click', () => {
-            menuToggle.classList.toggle('open');
-            navLinks.classList.toggle('open');
-        });
+            ALL_VIDEOS.forEach(vid => {
+                const title = getVideoTitle(vid, lang);
 
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                menuToggle.classList.remove('open');
-                navLinks.classList.remove('open');
-            });
-        });
+                const card = document.createElement('a');
+                card.href = vid.url;
+                card.className = 'poster-card';
+                card.setAttribute('data-video-id', vid.id);
+                card.setAttribute('data-search', `${vid.searchRu || ''} ${vid.searchEn || ''}`.toLowerCase());
 
-        const toastEl = document.getElementById('toast');
-        const toastIcon = document.getElementById('toastIcon');
-        const toastText = document.getElementById('toastText');
-        let toastTimer;
-
-        function showToast(text, icon = '✓', duration = 2200) {
-            toastIcon.textContent = icon;
-            toastText.textContent = text;
-            toastEl.classList.add('show');
-            clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => toastEl.classList.remove('show'), duration);
-        }
-
-        function bindPanel(linkId, panelId, overlayId, closeId) {
-            const link = document.getElementById(linkId);
-            const panel = document.getElementById(panelId);
-            const overlay = document.getElementById(overlayId);
-            const close = document.getElementById(closeId);
-
-            const open = (e) => {
-                if (e) e.preventDefault();
-                panel.classList.add('open');
-                overlay.classList.add('open');
-                document.body.classList.add('panel-open');
-            };
-            const shut = () => {
-                panel.classList.remove('open');
-                overlay.classList.remove('open');
-                setTimeout(() => {
-                    if (!document.querySelector('.about-panel.open')) {
-                        document.body.classList.remove('panel-open');
-                    }
-                }, 50);
-            };
-
-            if (link) link.addEventListener('click', open);
-            if (close) close.addEventListener('click', shut);
-            if (overlay) overlay.addEventListener('click', shut);
-
-            return { open, shut };
-        }
-
-        bindPanel('aboutLink', 'aboutPanel', 'aboutOverlay', 'aboutClose');
-        bindPanel('projectLink', 'projectPanel', 'projectOverlay', 'projectClose');
-        const settings = bindPanel(null, 'settingsPanel', 'settingsOverlay', 'settingsClose');
-        const favorites = bindPanel(null, 'favoritesPanel', 'favoritesOverlay', 'favoritesClose');
-
-        document.getElementById('settingsBtn').addEventListener('click', (e) => {
-            e.preventDefault();
-            menuToggle.classList.remove('open');
-            navLinks.classList.remove('open');
-            settings.open();
-        });
-
-        document.getElementById('favoritesBtn').addEventListener('click', (e) => {
-            e.preventDefault();
-            menuToggle.classList.remove('open');
-            navLinks.classList.remove('open');
-            renderFavorites();
-            favorites.open();
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                document.querySelectorAll('.about-panel.open').forEach(p => p.classList.remove('open'));
-                document.querySelectorAll('.about-overlay.open').forEach(o => o.classList.remove('open'));
-                document.body.classList.remove('panel-open');
-            }
-        });
-
-        const themeSwitch = document.getElementById('themeSwitch');
-
-        function applyTheme(theme) {
-            const isDark = theme === 'dark';
-            document.documentElement.classList.toggle('light-theme', !isDark);
-            themeSwitch.checked = isDark;
-            const meta = document.querySelector('meta[name="theme-color"]');
-            if (meta) meta.setAttribute('content', isDark ? '#0b0c10' : '#f4f6f7');
-        }
-
-        const savedTheme = localStorage.getItem(STORAGE.theme) || 'dark';
-        applyTheme(savedTheme);
-
-        themeSwitch.addEventListener('change', () => {
-            const theme = themeSwitch.checked ? 'dark' : 'light';
-            localStorage.setItem(STORAGE.theme, theme);
-            applyTheme(theme);
-        });
-
-        const langEnBtn = document.getElementById('langEn');
-        const langRuBtn = document.getElementById('langRu');
-
-        function applyLanguage(lang) {
-            document.querySelectorAll('[data-en]').forEach(el => {
-                el.innerHTML = lang === 'ru' ? el.getAttribute('data-ru') : el.getAttribute('data-en');
-            });
-            langEnBtn.classList.toggle('active', lang === 'en');
-            langRuBtn.classList.toggle('active', lang === 'ru');
-            document.documentElement.lang = lang;
-        }
-
-        const savedLang = localStorage.getItem(STORAGE.lang) || 'en';
-        applyLanguage(savedLang);
-
-        langEnBtn.addEventListener('click', () => {
-            localStorage.setItem(STORAGE.lang, 'en');
-            applyLanguage('en');
-            renderFavorites();
-        });
-
-        langRuBtn.addEventListener('click', () => {
-            localStorage.setItem(STORAGE.lang, 'ru');
-            applyLanguage('ru');
-            renderFavorites();
-        });
-
-        window.addEventListener('storage', (e) => {
-            if (e.key === STORAGE.theme) applyTheme(e.newValue || 'dark');
-            if (e.key === STORAGE.lang) {
-                applyLanguage(e.newValue || 'en');
-                updateSearchPlaceholder(e.newValue || 'en');
-                renderFavorites();
-            }
-            if (e.key === STORAGE.favorites) {
-                updateBadge();
-                applyFavStateOnPosters();
-                renderFavorites();
-            }
-        });
-
-        document.querySelectorAll('.poster-image-box img').forEach(img => {
-            const box = img.parentElement;
-            const markLoaded = () => {
-                img.classList.add('loaded');
-                box.classList.add('loaded');
-            };
-
-            if (img.complete && img.naturalWidth > 0) {
-                markLoaded();
-            } else {
-                img.addEventListener('load', markLoaded);
-                img.addEventListener('error', markLoaded);
-            }
-        });
-
-        const favoritesBtn = document.getElementById('favoritesBtn');
-        const favBadge = document.getElementById('favBadge');
-        const favList = document.getElementById('favList');
-        const favEmpty = document.getElementById('favEmpty');
-
-        function getFavorites() {
-            try {
-                return JSON.parse(localStorage.getItem(STORAGE.favorites)) || [];
-            } catch {
-                return [];
-            }
-        }
-
-        function setFavorites(list) {
-            localStorage.setItem(STORAGE.favorites, JSON.stringify(list));
-        }
-
-        function updateBadge() {
-            const favs = getFavorites();
-            if (favs.length > 0) {
-                favBadge.textContent = favs.length;
-                favBadge.classList.add('visible');
-                favoritesBtn.classList.add('has-items');
-            } else {
-                favBadge.classList.remove('visible');
-                favoritesBtn.classList.remove('has-items');
-            }
-        }
-
-        function applyFavStateOnPosters() {
-            const favs = getFavorites();
-            document.querySelectorAll('.fav-toggle').forEach(btn => {
-                const id = btn.getAttribute('data-fav-id');
-                btn.classList.toggle('is-fav', favs.includes(id));
-            });
-        }
-
-        document.querySelectorAll('.fav-toggle').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-
-                const id = btn.getAttribute('data-fav-id');
-                const lang = localStorage.getItem(STORAGE.lang) || 'en';
-                let favs = getFavorites();
-                const wasFav = favs.includes(id);
-
-                if (wasFav) {
-                    favs = favs.filter(x => x !== id);
-                    showToast(
-                        lang === 'ru' ? 'Удалено из избранного' : 'Removed from favorites',
-                        '💔'
-                    );
-                } else {
-                    favs.push(id);
-                    btn.classList.add('just-clicked');
-                    setTimeout(() => btn.classList.remove('just-clicked'), 500);
-                    showToast(
-                        lang === 'ru' ? 'Добавлено в избранное' : 'Added to favorites',
-                        '❤️'
-                    );
-                }
-
-                setFavorites(favs);
-                updateBadge();
-                applyFavStateOnPosters();
-            });
-        });
-
-        function renderFavorites() {
-            const favs = getFavorites();
-            favList.innerHTML = '';
-
-            if (favs.length === 0) {
-                favEmpty.style.display = 'block';
-                return;
-            }
-            favEmpty.style.display = 'none';
-
-            favs.forEach(id => {
-                const card = document.querySelector(`.poster-card[data-video-id="${id}"]`);
-                if (!card) return;
-
-                const link = card.getAttribute('href');
-                const poster = card.querySelector('.poster-image-box img')?.getAttribute('src') || '';
-                const titleEl = card.querySelector('.poster-info h3');
-                const title = titleEl ? titleEl.textContent.trim() : id;
-
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <a href="${link}" class="fav-item">
-                        <img class="fav-item-thumb" src="${poster}" alt="">
-                        <span class="fav-item-title">${title}</span>
-                        <button class="fav-item-remove" data-remove-id="${id}" aria-label="Remove">&times;</button>
-                    </a>
+                card.innerHTML = `
+                    <div class="poster-image-box">
+                        <img src="${vid.poster}" alt="${title}" loading="lazy">
+                        <button class="fav-toggle" data-fav-id="${vid.id}" aria-label="Add to favorites">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
+                        <div class="play-overlay"><span></span></div>
+                    </div>
+                    <div class="poster-info">
+                        <h3>${title}</h3>
+                    </div>
                 `;
-                favList.appendChild(li);
+
+                grid.appendChild(card);
             });
 
-            favList.querySelectorAll('.fav-item-remove').forEach(btn => {
+            /* Skeleton loading */
+            grid.querySelectorAll('.poster-image-box img').forEach(img => {
+                const box = img.parentElement;
+                const markLoaded = () => {
+                    img.classList.add('loaded');
+                    box.classList.add('loaded');
+                };
+                if (img.complete && img.naturalWidth > 0) markLoaded();
+                else {
+                    img.addEventListener('load', markLoaded);
+                    img.addEventListener('error', markLoaded);
+                }
+            });
+
+            /* Кнопки избранного */
+            grid.querySelectorAll('.fav-toggle').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-
-                    const id = btn.getAttribute('data-remove-id');
-                    const lang = localStorage.getItem(STORAGE.lang) || 'en';
-                    let favs = getFavorites();
-                    favs = favs.filter(x => x !== id);
-                    setFavorites(favs);
-
-                    updateBadge();
-                    applyFavStateOnPosters();
-                    renderFavorites();
-                    showToast(
-                        lang === 'ru' ? 'Удалено из избранного' : 'Removed from favorites',
-                        '💔'
-                    );
+                    toggleFavorite(btn.getAttribute('data-fav-id'), btn);
                 });
             });
+
+            applyFavStateOnPosters();
         }
 
-        updateBadge();
-        applyFavStateOnPosters();
-        renderFavorites();
+        /* ---------- Reveal on scroll ---------- */
+        function initReveal() {
+            const els = document.querySelectorAll('.poster-card');
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry, i) => {
+                        if (entry.isIntersecting) {
+                            setTimeout(() => entry.target.classList.add('revealed'), i * 80);
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+                els.forEach(el => observer.observe(el));
+            } else {
+                els.forEach(el => el.classList.add('revealed'));
+            }
+        }
 
-        const revealEls = document.querySelectorAll('.poster-card');
+        /* ---------- Hero animation ---------- */
+        function initHero() {
+            const heroTitle = document.getElementById('heroTitle');
+            const soundWave = document.getElementById('soundWave');
+            const text = 'BohtanVoice';
 
-        if ('IntersectionObserver' in window) {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry, i) => {
-                    if (entry.isIntersecting) {
-                        setTimeout(() => {
-                            entry.target.classList.add('revealed');
-                        }, i * 80);
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, {
-                threshold: 0.15,
-                rootMargin: '0px 0px -40px 0px'
+            heroTitle.innerHTML = '';
+            text.split('').forEach(ch => {
+                const s = document.createElement('span');
+                s.className = 'letter';
+                s.textContent = ch;
+                heroTitle.appendChild(s);
             });
 
-            revealEls.forEach(el => observer.observe(el));
-        } else {
-            revealEls.forEach(el => el.classList.add('revealed'));
-        }
+            const letters = heroTitle.querySelectorAll('.letter');
+            let animating = false;
 
-        const searchInput = document.getElementById('searchInput');
-        const searchClear = document.getElementById('searchClear');
-        const projectsGrid = document.getElementById('projectsGrid');
-        const noResults = document.getElementById('noResults');
-        const posterCards = projectsGrid.querySelectorAll('.poster-card');
+            function startWave() {
+                if (animating) return;
+                animating = true;
 
-        function filterPosters() {
-            const query = searchInput.value.trim().toLowerCase();
-            let visibleCount = 0;
+                letters.forEach((l, i) => l.style.animationDelay = (i * 0.1) + 's');
+                heroTitle.classList.add('wave-active');
+                soundWave.classList.add('active');
 
-            posterCards.forEach(card => {
-                const searchData = (card.getAttribute('data-search') || '').toLowerCase();
-                const textContent = card.textContent.toLowerCase();
-                const haystack = searchData + ' ' + textContent;
+                setTimeout(() => {
+                    heroTitle.classList.remove('wave-active');
+                    letters.forEach(l => l.style.animationDelay = '');
+                    animating = false;
+                }, 900 + letters.length * 100);
 
-                const matches = query === '' || haystack.includes(query);
+                setTimeout(() => soundWave.classList.remove('active'), 2500);
+            }
 
-                if (matches) {
-                    card.style.display = '';
-                    card.classList.add('revealed');
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
+            heroTitle.addEventListener('click', startWave);
+
+            window.addEventListener('load', () => {
+                if (localStorage.getItem(STORAGE.autowave) !== 'off') {
+                    setTimeout(startWave, 1000);
                 }
             });
-
-            if (visibleCount === 0 && query !== '') {
-                noResults.classList.add('visible');
-            } else {
-                noResults.classList.remove('visible');
-            }
-
-            if (query !== '') {
-                searchClear.classList.add('visible');
-            } else {
-                searchClear.classList.remove('visible');
-            }
         }
 
-        searchInput.addEventListener('input', filterPosters);
+        /* ---------- Запуск ---------- */
+        document.addEventListener('DOMContentLoaded', () => {
+            buildProjectsGrid();
+            initReveal();
+            initHero();
 
-        searchClear.addEventListener('click', () => {
-            searchInput.value = '';
-            filterPosters();
-            searchInput.focus();
-        });
-
-        function updateSearchPlaceholder(lang) {
-            const placeholder = lang === 'ru'
-                ? searchInput.getAttribute('data-ru-placeholder')
-                : searchInput.getAttribute('data-en-placeholder');
-            searchInput.placeholder = placeholder;
-        }
-
-        updateSearchPlaceholder(localStorage.getItem(STORAGE.lang) || 'en');
-
-        langEnBtn.addEventListener('click', () => updateSearchPlaceholder('en'));
-        langRuBtn.addEventListener('click', () => updateSearchPlaceholder('ru'));
-
-        const backToTop = document.getElementById('backToTop');
-
-        function toggleBackToTop() {
-            if (window.scrollY > 400) {
-                backToTop.classList.add('visible');
-            } else {
-                backToTop.classList.remove('visible');
-            }
-        }
-
-        window.addEventListener('scroll', toggleBackToTop, { passive: true });
-        toggleBackToTop();
-
-        backToTop.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        // ============================================================
-        // HERO — буквы подпрыгивают волной + звуковая волна оживает
-        // ============================================================
-        const heroTitle = document.getElementById('heroTitle');
-        const soundWave = document.getElementById('soundWave');
-        const titleText = 'BohtanVoice';
-
-        titleText.split('').forEach(char => {
-            const span = document.createElement('span');
-            span.className = 'letter';
-            span.textContent = char;
-            heroTitle.appendChild(span);
-        });
-
-        const letters = heroTitle.querySelectorAll('.letter');
-        let isAnimating = false;
-
-        heroTitle.addEventListener('click', () => {
-            if (isAnimating) return;
-            isAnimating = true;
-
-            // Задержка между буквами — теперь 0.1s (было 0.06s) → волна длиннее
-            letters.forEach((letter, i) => {
-                letter.style.animationDelay = (i * 0.1) + 's';
-            });
-
-            heroTitle.classList.add('wave-active');
-            soundWave.classList.add('active');
-
-            // Общая длительность — увеличена, чтобы успеть за последней буквой
-            const totalDuration = 900 + (letters.length * 100);
-            setTimeout(() => {
-                heroTitle.classList.remove('wave-active');
-                letters.forEach(letter => letter.style.animationDelay = '');
-                isAnimating = false;
-            }, totalDuration);
-
-            // Волна затихает через 2.5s
-            setTimeout(() => {
-                soundWave.classList.remove('active');
-            }, 2500);
+            /* Перестроить сетку при смене языка */
+            const langEnBtn = document.getElementById('langEn');
+            const langRuBtn = document.getElementById('langRu');
+            if (langEnBtn) langEnBtn.addEventListener('click', () => setTimeout(buildProjectsGrid, 0));
+            if (langRuBtn) langRuBtn.addEventListener('click', () => setTimeout(buildProjectsGrid, 0));
         });
     </script>
 

@@ -333,6 +333,18 @@ function initNavSearch() {
 
     if (!searchBtn || !searchWrap || !searchInput) return;
 
+    /* ---------- Обновление высоты навбара ---------- */
+    function updateNavHeight() {
+        const nav = document.querySelector('nav');
+        if (!nav) return;
+        const h = nav.offsetHeight;
+        document.documentElement.style.setProperty('--nav-height', h + 'px');
+    }
+
+    updateNavHeight();
+    window.addEventListener('resize', updateNavHeight);
+    window.addEventListener('orientationchange', () => setTimeout(updateNavHeight, 100));
+
     function openSearch() {
         searchWrap.classList.add('open');
         searchBtn.classList.add('active');
@@ -357,7 +369,6 @@ function initNavSearch() {
 
     searchBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        /* Закрываем меню и панели */
         const menuToggle = document.getElementById('menuToggle');
         const navLinks = document.getElementById('navLinks');
         if (menuToggle) menuToggle.classList.remove('open');
@@ -381,14 +392,12 @@ function initNavSearch() {
         });
     }
 
-    /* Esc — закрыть */
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && searchWrap.classList.contains('open')) {
             closeSearch();
         }
     });
 
-    /* Клик вне — закрыть */
     document.addEventListener('click', (e) => {
         if (!searchWrap.classList.contains('open')) return;
         if (searchWrap.contains(e.target)) return;

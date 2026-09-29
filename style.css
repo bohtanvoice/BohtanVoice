@@ -12,6 +12,7 @@
     --skeleton: #1f2833;
     --skeleton-shine: #2c3844;
     --font-scale: 1;
+    --nav-height: 80px;
 }
 
 html.light-theme {
@@ -263,7 +264,7 @@ html.light-theme nav {
    ============================================================ */
 .nav-search-wrap {
     position: fixed;
-    top: 80px;
+    top: calc(var(--nav-height) + 14px);
     left: 0;
     width: 100%;
     padding: 0 20px;
@@ -403,11 +404,6 @@ html.light-theme nav {
 #searchNavBtn.active {
     border-color: var(--accent);
     background-color: rgba(102, 252, 241, 0.15);
-}
-
-@media (max-width: 600px) {
-    .nav-search-wrap { top: 72px; padding: 0 12px; }
-    .nav-search-input { font-size: 0.9rem; padding: 12px 40px 12px 40px; }
 }
 
 /* ============================================================
@@ -806,4 +802,5 @@ footer {
         width: 18px;
         height: 18px;
     }
+    .nav-search-input { font-size: 0.9rem; padding: 12px 40px 12px 40px; }
 }

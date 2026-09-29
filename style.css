@@ -260,6 +260,75 @@ html.light-theme nav {
 }
 
 /* ============================================================
+   TOOLTIPS для иконок в навбаре
+   ============================================================ */
+.icon-btn[data-tooltip],
+.menu-toggle[data-tooltip] {
+    position: relative;
+}
+
+.icon-btn[data-tooltip]::after,
+.menu-toggle[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-4px);
+    background-color: var(--bg-panel);
+    color: var(--accent);
+    border: 1px solid var(--accent-soft);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    font-family: inherit;
+    white-space: nowrap;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 1100;
+}
+
+.icon-btn[data-tooltip]::before,
+.menu-toggle[data-tooltip]::before {
+    content: "";
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid var(--accent-soft);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 1100;
+}
+
+.icon-btn[data-tooltip]:hover::after,
+.menu-toggle[data-tooltip]:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.icon-btn[data-tooltip]:hover::before,
+.menu-toggle[data-tooltip]:hover::before {
+    opacity: 1;
+}
+
+@media (hover: none) {
+    .icon-btn[data-tooltip]::after,
+    .icon-btn[data-tooltip]::before,
+    .menu-toggle[data-tooltip]::after,
+    .menu-toggle[data-tooltip]::before {
+        display: none;
+    }
+}
+
+/* ============================================================
    NAV SEARCH — раскрывающийся поиск в навбаре
    ============================================================ */
 .nav-search-wrap {

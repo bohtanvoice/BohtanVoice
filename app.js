@@ -78,6 +78,7 @@ function applyLanguage(lang) {
     if (typeof renderFavorites === 'function') renderFavorites();
     if (typeof updateFavButtonLabel === 'function') updateFavButtonLabel();
     if (typeof renderNavSearchResults === 'function') renderNavSearchResults();
+    if (typeof updateNavTooltips === 'function') updateNavTooltips();
 }
 
 /* ============================================================
@@ -277,6 +278,25 @@ function toggleFavorite(id, btnEl) {
     updateBadge();
     applyFavStateOnPosters();
     if (typeof updateFavButtonLabel === 'function') updateFavButtonLabel();
+}
+
+/* ============================================================
+   ТУЛТИПЫ для иконок в навбаре
+   ============================================================ */
+function updateNavTooltips() {
+    const lang = getLang();
+
+    const tooltips = {
+        searchNavBtn: lang === 'ru' ? 'Поиск' : 'Search',
+        favoritesBtn: lang === 'ru' ? 'Избранное' : 'Favorites',
+        settingsBtn: lang === 'ru' ? 'Настройки' : 'Settings',
+        menuToggle:   lang === 'ru' ? 'Меню' : 'Menu'
+    };
+
+    Object.keys(tooltips).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.setAttribute('data-tooltip', tooltips[id]);
+    });
 }
 
 /* ============================================================
@@ -581,6 +601,9 @@ function initCommon() {
 
     /* Поиск в навбаре */
     initNavSearch();
+
+    /* Тултипы для иконок */
+    updateNavTooltips();
 }
 
 document.addEventListener('DOMContentLoaded', initCommon);

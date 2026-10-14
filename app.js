@@ -16,8 +16,15 @@ const STORAGE = {
 /* ---------- Системная тема ---------- */
 const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 
+/* ---------- SVG сердечка (для анимаций) ---------- */
+const HEART_SVG = `
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+    </svg>
+`;
+
 /* ============================================================
-   ТЕМА (auto / light / dark)
+   ТЕМА
    ============================================================ */
 function getSavedTheme() {
     return localStorage.getItem(STORAGE.theme) || 'auto';
@@ -126,7 +133,7 @@ function showToast(text, icon = '✓', duration = 2200) {
 }
 
 /* ============================================================
-   ПАНЕЛИ (About / Project / Settings / Favorites)
+   ПАНЕЛИ
    ============================================================ */
 function openPanel(panelId, overlayId) {
     const panel = document.getElementById(panelId);
@@ -240,6 +247,14 @@ function renderFavorites() {
             favs = favs.filter(x => x !== id);
             setFavorites(favs);
 
+            breakHeart(btn);
+
+            const favItem = btn.closest('.fav-item');
+            if (favItem) {
+                favItem.classList.add('card-removed');
+                setTimeout(() => favItem.classList.remove('card-removed'), 550);
+            }
+
             updateBadge();
             applyFavStateOnPosters();
             renderFavorites();
@@ -251,6 +266,103 @@ function renderFavorites() {
     });
 }
 
+/* ============================================================
+   FLY-TO-FAVORITE
+   ============================================================ */
+function flyHeartToNav(fromEl, onArrive) {
+    const navHeart = document.getElementById('favoritesBtn');
+    if (!navHeart) {
+        if (typeof onArrive === 'function') onArrive();
+        return;
+    }
+
+    const fromRect = fromEl.getBoundingClientRect();
+    const toRect = navHeart.getBoundingClientRect();
+
+    const startX = fromRect.left + fromRect.width / 2 - 14;
+    const startY = fromRect.top + fromRect.height / 2 - 14;
+    const endX = toRect.left + toRect.width / 2 - 14;
+    const endY = toRect.top + toRect.height / 2 - 14;
+
+    const heart = document.createElement('div');
+    heart.className = 'fly-heart';
+    heart.innerHTML = HEART_SVG;
+    heart.style.left = startX + 'px';
+    heart.style.top = startY + 'px';
+    document.body.appendChild(heart);
+
+    const midX = (startX + endX) / 2;
+    const midY = Math.min(startY, endY) - 80;
+
+    const anim = heart.animate([
+        {
+            transform: 'translate(0, 0) scale(0.8)',
+            opacity: 1
+        },
+        {
+            transform: `translate(${(midX - startX) * 0.6}px, ${(midY - startY) * 0.8}px) scale(1.3)`,
+            opacity: 1,
+            offset: 0.5
+        },
+        {
+            transform: `translate(${endX - startX}px, ${endY - startY}px) scale(0.5)`,
+            opacity: 0.7
+        }
+    ], {
+        duration: 750,
+        easing: 'cubic-bezier(0.4, 0, 0.6, 1)',
+        fill: 'forwards'
+    });
+
+    anim.onfinish = () => {
+        heart.remove();
+
+        navHeart.classList.add('got-heart');
+        setTimeout(() => navHeart.classList.remove('got-heart'), 500);
+
+        const badge = document.getElementById('favBadge');
+        if (badge) {
+            badge.classList.add('bounce');
+            setTimeout(() => badge.classList.remove('bounce'), 450);
+        }
+
+        if (typeof onArrive === 'function') onArrive();
+    };
+}
+
+/* ============================================================
+   BREAK-HEART
+   ============================================================ */
+function breakHeart(fromEl) {
+    if (!fromEl) return;
+
+    const rect = fromEl.getBoundingClientRect();
+    const startX = rect.left + rect.width / 2 - 16;
+    const startY = rect.top + rect.height / 2 - 16;
+
+    const wrap = document.createElement('div');
+    wrap.className = 'broken-heart';
+    wrap.style.left = startX + 'px';
+    wrap.style.top = startY + 'px';
+
+    const left = document.createElement('div');
+    left.className = 'broken-heart-half left';
+    left.innerHTML = HEART_SVG;
+
+    const right = document.createElement('div');
+    right.className = 'broken-heart-half right';
+    right.innerHTML = HEART_SVG;
+
+    wrap.appendChild(left);
+    wrap.appendChild(right);
+    document.body.appendChild(wrap);
+
+    setTimeout(() => wrap.remove(), 1000);
+}
+
+/* ============================================================
+   TOGGLE FAVORITE
+   ============================================================ */
 function toggleFavorite(id, btnEl) {
     const lang = getLang();
     let favs = getFavorites();
@@ -258,30 +370,66 @@ function toggleFavorite(id, btnEl) {
 
     if (wasFav) {
         favs = favs.filter(x => x !== id);
+        setFavorites(favs);
+
+        if (btnEl) {
+            breakHeart(btnEl);
+
+            const card = btnEl.closest('.poster-card');
+            if (card) {
+                card.classList.add('card-removed');
+                setTimeout(() => card.classList.remove('card-removed'), 550);
+            } else {
+                btnEl.classList.add('btn-removed');
+                setTimeout(() => btnEl.classList.remove('btn-removed'), 550);
+            }
+        }
+
+        updateBadge();
+        applyFavStateOnPosters();
+        if (typeof updateFavButtonLabel === 'function') updateFavButtonLabel();
+
         showToast(
             lang === 'ru' ? 'Удалено из избранного' : 'Removed from favorites',
             '💔'
         );
     } else {
         favs.push(id);
+        setFavorites(favs);
+
         if (btnEl) {
             btnEl.classList.add('just-clicked');
             setTimeout(() => btnEl.classList.remove('just-clicked'), 500);
+
+            const card = btnEl.closest('.poster-card');
+            if (card) {
+                card.classList.add('card-added');
+                setTimeout(() => card.classList.remove('card-added'), 550);
+            } else {
+                btnEl.classList.add('btn-added');
+                setTimeout(() => btnEl.classList.remove('btn-added'), 550);
+            }
+
+            flyHeartToNav(btnEl, () => {
+                updateBadge();
+                applyFavStateOnPosters();
+                if (typeof updateFavButtonLabel === 'function') updateFavButtonLabel();
+            });
+        } else {
+            updateBadge();
+            applyFavStateOnPosters();
+            if (typeof updateFavButtonLabel === 'function') updateFavButtonLabel();
         }
+
         showToast(
             lang === 'ru' ? 'Добавлено в избранное' : 'Added to favorites',
             '❤️'
         );
     }
-
-    setFavorites(favs);
-    updateBadge();
-    applyFavStateOnPosters();
-    if (typeof updateFavButtonLabel === 'function') updateFavButtonLabel();
 }
 
 /* ============================================================
-   ТУЛТИПЫ для иконок в навбаре
+   ТУЛТИПЫ
    ============================================================ */
 function updateNavTooltips() {
     const lang = getLang();
@@ -290,7 +438,9 @@ function updateNavTooltips() {
         searchNavBtn: lang === 'ru' ? 'Поиск' : 'Search',
         favoritesBtn: lang === 'ru' ? 'Избранное' : 'Favorites',
         settingsBtn: lang === 'ru' ? 'Настройки' : 'Settings',
-        menuToggle:   lang === 'ru' ? 'Меню' : 'Menu'
+        menuToggle:   lang === 'ru' ? 'Меню' : 'Menu',
+        sharePageBtn: lang === 'ru' ? 'Поделиться' : 'Share',
+        backToTop:    lang === 'ru' ? 'Наверх' : 'Top'
     };
 
     Object.keys(tooltips).forEach(id => {
@@ -300,7 +450,7 @@ function updateNavTooltips() {
 }
 
 /* ============================================================
-   NAV SEARCH — поиск в навбаре (работает на всех страницах)
+   NAV SEARCH
    ============================================================ */
 function renderNavSearchResults() {
     const resultsBox = document.getElementById('navSearchResults');
@@ -353,7 +503,6 @@ function initNavSearch() {
 
     if (!searchBtn || !searchWrap || !searchInput) return;
 
-    /* ---------- Обновление высоты навбара ---------- */
     function updateNavHeight() {
         const nav = document.querySelector('nav');
         if (!nav) return;
@@ -427,10 +576,236 @@ function initNavSearch() {
 }
 
 /* ============================================================
-   ИНИЦИАЛИЗАЦИЯ — вызывается на каждой странице
+   FLOATING ACTIONS
+   ============================================================ */
+function initFloatingActions() {
+    const actionsWrap = document.getElementById('floatingActions');
+    const backBtn = document.getElementById('backToTop');
+    const shareBtn = document.getElementById('sharePageBtn');
+    if (!actionsWrap) return;
+
+    function toggleVisible() {
+        actionsWrap.classList.toggle('visible', window.scrollY > 300);
+    }
+
+    window.addEventListener('scroll', toggleVisible, { passive: true });
+    toggleVisible();
+
+    if (backBtn) {
+        backBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    if (shareBtn) {
+        shareBtn.addEventListener('click', async () => {
+            const lang = getLang();
+            const shareData = {
+                title: document.title,
+                text: lang === 'ru'
+                    ? 'BohtanVoice — озвучка на диалекте Bohtan'
+                    : 'BohtanVoice — voiceover in the Bohtan dialect',
+                url: window.location.href
+            };
+
+            if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+                try { await navigator.share(shareData); } catch (err) {}
+            } else {
+                try {
+                    await navigator.clipboard.writeText(window.location.href);
+                    showToast(
+                        lang === 'ru' ? 'Ссылка скопирована' : 'Link copied',
+                        '✓'
+                    );
+                } catch {
+                    prompt(lang === 'ru' ? 'Скопируйте ссылку:' : 'Copy the link:', window.location.href);
+                }
+            }
+        });
+    }
+}
+
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
+function initScrollProgress() {
+    const bar = document.getElementById('scrollProgress');
+    if (!bar) return;
+
+    function update() {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        bar.style.width = pct + '%';
+    }
+
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+}
+
+/* ============================================================
+   CLICK RIPPLE
+   ============================================================ */
+function initRippleEffect() {
+    const selectors = [
+        '.action-btn',
+        '.icon-btn',
+        '.lang-btn',
+        '.floating-btn',
+        '.fav-item',
+        '.nav-links a',
+        '.video-tab-btn'
+    ];
+
+    const elements = document.querySelectorAll(selectors.join(','));
+
+    elements.forEach(el => {
+        el.classList.add('ripple-host');
+        el.addEventListener('click', (e) => {
+            const rect = el.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+
+            const ripple = document.createElement('span');
+            ripple.className = 'ripple';
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+
+            el.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        });
+    });
+}
+
+/* ============================================================
+   VIDEO TABS
+   ============================================================ */
+function initVideoTabs() {
+    const tabsContainer = document.getElementById('videoTabs');
+    if (!tabsContainer) return;
+
+    const videoId = (typeof CURRENT_VIDEO_ID !== 'undefined') ? CURRENT_VIDEO_ID : null;
+    const video = (videoId && typeof getVideoById === 'function') ? getVideoById(videoId) : null;
+
+    const trailerPane = document.getElementById('videoPaneTrailer');
+    const fullMoviePane = document.getElementById('videoPaneFull');
+    const tabBtns = tabsContainer.querySelectorAll('.video-tab-btn');
+
+    if (video) {
+        if (video.trailer && trailerPane) {
+            trailerPane.innerHTML = `<iframe src="${video.trailer}" allowfullscreen allow="autoplay; fullscreen"></iframe>`;
+        }
+        if (video.fullMovie && fullMoviePane) {
+            fullMoviePane.innerHTML = `<iframe src="${video.fullMovie}" allowfullscreen allow="autoplay; fullscreen"></iframe>`;
+        }
+    }
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetTab = btn.getAttribute('data-tab');
+
+            tabBtns.forEach(b => b.classList.toggle('active', b === btn));
+
+            document.querySelectorAll('.video-tab-pane').forEach(pane => {
+                pane.classList.toggle('active', pane.getAttribute('data-tab') === targetTab);
+            });
+        });
+    });
+}
+
+/* ============================================================
+   CONFETTI
+   ============================================================ */
+function initEasterEgg() {
+    const heroTitle = document.getElementById('heroTitle');
+    if (!heroTitle) return;
+
+    let clickCount = 0;
+    let clickTimer = null;
+    let confettiRunning = false;
+
+    heroTitle.addEventListener('click', () => {
+        if (confettiRunning) return;
+
+        clickCount++;
+
+        clearTimeout(clickTimer);
+        clickTimer = setTimeout(() => {
+            clickCount = 0;
+        }, 2000);
+
+        if (clickCount >= 5) {
+            clickCount = 0;
+            clearTimeout(clickTimer);
+            launchConfetti();
+        }
+    });
+
+    function launchConfetti() {
+        confettiRunning = true;
+
+        const rect = heroTitle.getBoundingClientRect();
+        const originX = rect.left + rect.width / 2;
+        const originY = rect.top + rect.height / 2;
+
+        const pieces = 90;
+        const shapes = ['circle', 'square', 'long', ''];
+
+        for (let i = 0; i < pieces; i++) {
+            const angle = (Math.PI * 2 * i) / pieces + (Math.random() - 0.5) * 0.4;
+            const distance = 250 + Math.random() * 450;
+            const tx = Math.cos(angle) * distance;
+            const ty = Math.sin(angle) * distance + 150 + Math.random() * 200;
+            const rot = (Math.random() - 0.5) * 900;
+            const scale = 0.4 + Math.random() * 1.0;
+            const delay = Math.random() * 250;
+
+            const piece = document.createElement('div');
+            const shape = shapes[Math.floor(Math.random() * shapes.length)];
+            piece.className = 'confetti-piece' + (shape ? ' ' + shape : '');
+
+            piece.style.left = originX + 'px';
+            piece.style.top = originY + 'px';
+
+            piece.style.setProperty('--tx', tx + 'px');
+            piece.style.setProperty('--ty', ty + 'px');
+            piece.style.setProperty('--rot', rot + 'deg');
+            piece.style.setProperty('--scale', scale);
+
+            const hue = 170 + Math.random() * 20;
+            piece.style.backgroundColor = `hsl(${hue}, 90%, ${60 + Math.random() * 15}%)`;
+
+            document.body.appendChild(piece);
+
+            setTimeout(() => {
+                piece.style.animation = `confettiFly ${2000 + Math.random() * 1200}ms cubic-bezier(0.15, 0.7, 0.35, 1) forwards`;
+            }, delay);
+
+            setTimeout(() => piece.remove(), 3500 + delay);
+        }
+
+        const lang = getLang();
+        setTimeout(() => {
+            showToast(
+                lang === 'ru' ? '🎉 Секрет найден!' : '🎉 Secret found!',
+                '✨',
+                2500
+            );
+        }, 400);
+
+        setTimeout(() => {
+            confettiRunning = false;
+        }, 3500);
+    }
+}
+
+/* ============================================================
+   ИНИЦИАЛИЗАЦИЯ
    ============================================================ */
 function initCommon() {
-    /* Тема */
     applyTheme();
     document.querySelectorAll('#themeToggle .lang-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -439,7 +814,6 @@ function initCommon() {
         });
     });
 
-    /* Язык */
     applyLanguage(getLang());
     const langEnBtn = document.getElementById('langEn');
     const langRuBtn = document.getElementById('langRu');
@@ -452,7 +826,6 @@ function initCommon() {
         applyLanguage('ru');
     });
 
-    /* Размер шрифта */
     applyFontSize(localStorage.getItem(STORAGE.fontSize) || 'normal');
     document.querySelectorAll('#fontSizeToggle .size-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -462,7 +835,6 @@ function initCommon() {
         });
     });
 
-    /* Плотность */
     applyDensity(localStorage.getItem(STORAGE.density) || 'normal');
     document.querySelectorAll('#densityToggle .density-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -472,7 +844,6 @@ function initCommon() {
         });
     });
 
-    /* Авто-анимация */
     const autowaveSwitch = document.getElementById('autowaveSwitch');
     if (autowaveSwitch) {
         autowaveSwitch.checked = localStorage.getItem(STORAGE.autowave) !== 'off';
@@ -481,7 +852,6 @@ function initCommon() {
         });
     }
 
-    /* Бургер-меню */
     const menuToggle = document.getElementById('menuToggle');
     const navLinks = document.getElementById('navLinks');
     if (menuToggle && navLinks) {
@@ -498,7 +868,6 @@ function initCommon() {
         });
     }
 
-    /* Кнопки в навигации: избранное / настройки */
     const favoritesBtn = document.getElementById('favoritesBtn');
     if (favoritesBtn) {
         favoritesBtn.addEventListener('click', (e) => {
@@ -520,7 +889,7 @@ function initCommon() {
         });
     }
 
-    /* Ссылки на About / Project в меню */
+    /* Ссылки на About / Dialect в меню */
     const aboutLink = document.getElementById('aboutLink');
     if (aboutLink) {
         aboutLink.addEventListener('click', (e) => {
@@ -528,18 +897,31 @@ function initCommon() {
             openPanel('aboutPanel', 'aboutOverlay');
         });
     }
-    const projectLink = document.getElementById('projectLink');
-    if (projectLink) {
-        projectLink.addEventListener('click', (e) => {
+    const dialectLink = document.getElementById('dialectLink');
+    if (dialectLink) {
+        dialectLink.addEventListener('click', (e) => {
             e.preventDefault();
-            openPanel('projectPanel', 'projectOverlay');
+            openPanel('dialectPanel', 'dialectOverlay');
         });
     }
 
-    /* Кнопки закрытия панелей */
+    /* Ссылка на «Контакты» — плавная прокрутка */
+    const contactsLink = document.getElementById('contactsLink');
+    if (contactsLink) {
+        contactsLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const contactsSection = document.getElementById('contacts');
+            if (contactsSection) {
+                if (menuToggle) menuToggle.classList.remove('open');
+                if (navLinks) navLinks.classList.remove('open');
+                contactsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    }
+
     const panelBindings = [
         ['aboutClose', 'aboutPanel', 'aboutOverlay'],
-        ['projectClose', 'projectPanel', 'projectOverlay'],
+        ['dialectClose', 'dialectPanel', 'dialectOverlay'],
         ['settingsClose', 'settingsPanel', 'settingsOverlay'],
         ['favoritesClose', 'favoritesPanel', 'favoritesOverlay']
     ];
@@ -551,12 +933,10 @@ function initCommon() {
         if (overlay) overlay.addEventListener('click', () => closePanel(panelId, overlayId));
     });
 
-    /* Esc закрывает всё */
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeAllPanels();
     });
 
-    /* Кнопки избранного на постерах */
     document.querySelectorAll('.fav-toggle').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -569,20 +949,12 @@ function initCommon() {
     applyFavStateOnPosters();
     renderFavorites();
 
-    /* Back to top */
-    const backToTop = document.getElementById('backToTop');
-    if (backToTop) {
-        const toggleBackToTop = () => {
-            backToTop.classList.toggle('visible', window.scrollY > 400);
-        };
-        window.addEventListener('scroll', toggleBackToTop, { passive: true });
-        toggleBackToTop();
-        backToTop.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    }
+    initFloatingActions();
+    initScrollProgress();
+    initRippleEffect();
+    initVideoTabs();
+    initEasterEgg();
 
-    /* Cross-tab sync */
     window.addEventListener('storage', (e) => {
         if (e.key === STORAGE.theme) applyTheme();
         if (e.key === STORAGE.lang) applyLanguage(e.newValue || 'en');
@@ -599,10 +971,7 @@ function initCommon() {
         }
     });
 
-    /* Поиск в навбаре */
     initNavSearch();
-
-    /* Тултипы для иконок */
     updateNavTooltips();
 }
 

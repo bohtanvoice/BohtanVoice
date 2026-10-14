@@ -167,6 +167,9 @@ html.light-theme nav {
 #favoritesBtn.has-items:hover svg { fill: #ff4d6d; stroke: #ff4d6d; }
 #favoritesBtn:active svg { transform: scale(0.9); animation: none; }
 
+#favoritesBtn.ripple-host { overflow: visible; }
+#favoritesBtn .ripple { border-radius: 8px; }
+
 @keyframes heartBeat {
     0%   { transform: scale(1.18); }
     15%  { transform: scale(1.28); }
@@ -178,17 +181,19 @@ html.light-theme nav {
 
 .fav-badge {
     position: absolute;
-    top: -4px; right: -4px;
+    top: -6px; right: -6px;
     background-color: var(--accent);
     color: var(--bg-main);
     font-size: 0.65rem;
     font-weight: 700;
     border-radius: 10px;
-    padding: 1px 5px;
-    min-width: 16px;
+    padding: 1px 6px;
+    min-width: 18px;
     text-align: center;
-    line-height: 1.3;
+    line-height: 1.4;
     display: none;
+    z-index: 2;
+    box-shadow: 0 0 0 2px var(--bg-main);
 }
 
 .fav-badge.visible { display: block; }
@@ -260,11 +265,24 @@ html.light-theme nav {
 }
 
 /* ============================================================
-   TOOLTIPS для иконок в навбаре
+   TOOLTIPS
    ============================================================ */
 .icon-btn[data-tooltip],
-.menu-toggle[data-tooltip] {
+.menu-toggle[data-tooltip],
+.floating-btn[data-tooltip] {
     position: relative;
+}
+
+.icon-btn.ripple-host,
+.menu-toggle.ripple-host,
+.floating-btn.ripple-host {
+    overflow: visible;
+}
+
+.icon-btn .ripple,
+.menu-toggle .ripple,
+.floating-btn .ripple {
+    border-radius: 8px;
 }
 
 .icon-btn[data-tooltip]::after,
@@ -319,17 +337,45 @@ html.light-theme nav {
     opacity: 1;
 }
 
+.floating-btn[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    right: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%) translateX(4px);
+    background-color: var(--bg-panel);
+    color: var(--accent);
+    border: 1px solid var(--accent-soft);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    font-family: inherit;
+    white-space: nowrap;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 1100;
+}
+
+.floating-btn[data-tooltip]:hover::after {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+}
+
 @media (hover: none) {
     .icon-btn[data-tooltip]::after,
     .icon-btn[data-tooltip]::before,
     .menu-toggle[data-tooltip]::after,
-    .menu-toggle[data-tooltip]::before {
+    .menu-toggle[data-tooltip]::before,
+    .floating-btn[data-tooltip]::after {
         display: none;
     }
 }
 
 /* ============================================================
-   NAV SEARCH — раскрывающийся поиск в навбаре
+   NAV SEARCH
    ============================================================ */
 .nav-search-wrap {
     position: fixed;
@@ -476,7 +522,7 @@ html.light-theme nav {
 }
 
 /* ============================================================
-   Анимация иконки поиска при наведении (стучание)
+   Анимация иконки поиска
    ============================================================ */
 #searchNavBtn svg {
     transition: fill 0.25s ease, stroke 0.25s ease, transform 0.25s ease;
@@ -791,12 +837,37 @@ html.light-theme nav {
 .toast-icon { font-size: 1.1rem; line-height: 1; }
 
 /* ============================================================
-   BACK TO TOP
+   PROGRESS BAR
    ============================================================ */
-.back-to-top {
+.scroll-progress {
     position: fixed;
-    bottom: 24px; right: 24px;
-    width: 48px; height: 48px;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent-soft), var(--accent));
+    box-shadow: 0 0 10px rgba(102, 252, 241, 0.6);
+    z-index: 1100;
+    transition: width 0.1s linear;
+    pointer-events: none;
+}
+
+/* ============================================================
+   FLOATING ACTIONS
+   ============================================================ */
+.floating-actions {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 900;
+}
+
+.floating-btn {
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     background-color: var(--bg-panel);
     border: 1px solid var(--accent-soft);
@@ -810,16 +881,16 @@ html.light-theme nav {
     pointer-events: none;
     transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-    z-index: 900;
+    padding: 0;
 }
 
-.back-to-top.visible {
+.floating-actions.visible .floating-btn {
     opacity: 1;
     transform: translateY(0) scale(1);
     pointer-events: auto;
 }
 
-.back-to-top:hover {
+.floating-btn:hover {
     background-color: var(--accent);
     color: var(--bg-main);
     border-color: var(--accent);
@@ -827,13 +898,464 @@ html.light-theme nav {
     box-shadow: 0 12px 30px rgba(102, 252, 241, 0.35);
 }
 
-.back-to-top svg {
-    width: 22px; height: 22px;
+.floating-btn svg {
+    width: 22px;
+    height: 22px;
     stroke: currentColor;
     fill: none;
     stroke-width: 2.5;
     stroke-linecap: round;
     stroke-linejoin: round;
+}
+
+/* ============================================================
+   CLICK RIPPLE
+   ============================================================ */
+.ripple-host {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(102, 252, 241, 0.4);
+    transform: scale(0);
+    animation: rippleEffect 0.6s ease-out;
+    pointer-events: none;
+    z-index: 1;
+}
+
+html.light-theme .ripple {
+    background: rgba(14, 143, 134, 0.35);
+}
+
+@keyframes rippleEffect {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* ============================================================
+   FLY-TO-FAVORITE
+   ============================================================ */
+.fly-heart {
+    position: fixed;
+    width: 28px;
+    height: 28px;
+    pointer-events: none;
+    z-index: 5000;
+    will-change: transform, opacity;
+    filter: drop-shadow(0 0 8px rgba(255, 77, 109, 0.6));
+}
+
+.fly-heart svg {
+    width: 100%;
+    height: 100%;
+    fill: #ff4d6d;
+    stroke: #ff4d6d;
+    stroke-width: 0;
+}
+
+#favoritesBtn.got-heart svg {
+    animation: gotHeartPulse 0.5s ease-out;
+}
+
+#favoritesBtn.got-heart {
+    border-color: #ff4d6d;
+}
+
+@keyframes gotHeartPulse {
+    0%   { transform: scale(1); }
+    30%  { transform: scale(1.45); }
+    60%  { transform: scale(0.92); }
+    100% { transform: scale(1); }
+}
+
+@keyframes badgeBounce {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.35); }
+    100% { transform: scale(1); }
+}
+
+.fav-badge.bounce {
+    animation: badgeBounce 0.45s ease-out;
+}
+
+/* ============================================================
+   BREAK-HEART
+   ============================================================ */
+.broken-heart {
+    position: fixed;
+    width: 32px;
+    height: 32px;
+    pointer-events: none;
+    z-index: 5000;
+}
+
+.broken-heart-half {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    filter: drop-shadow(0 0 6px rgba(255, 77, 109, 0.5));
+}
+
+.broken-heart-half svg {
+    width: 32px;
+    height: 32px;
+    fill: #ff4d6d;
+    stroke: #ff4d6d;
+    stroke-width: 0;
+}
+
+.broken-heart-half.left {
+    left: 0;
+    animation: fallLeft 0.9s cubic-bezier(0.5, 0, 0.75, 0) forwards;
+}
+
+.broken-heart-half.right {
+    right: 0;
+    animation: fallRight 0.9s cubic-bezier(0.5, 0, 0.75, 0) forwards;
+}
+
+.broken-heart-half.left svg { margin-left: 0; }
+.broken-heart-half.right svg { margin-left: -16px; }
+
+@keyframes fallLeft {
+    0% { transform: translate(0, 0) rotate(0); opacity: 1; }
+    100% { transform: translate(-32px, 90px) rotate(-55deg); opacity: 0; }
+}
+
+@keyframes fallRight {
+    0% { transform: translate(0, 0) rotate(0); opacity: 1; }
+    100% { transform: translate(32px, 90px) rotate(55deg); opacity: 0; }
+}
+
+/* ============================================================
+   CARD ANIMATIONS
+   ============================================================ */
+@keyframes cardCombo {
+    0% { transform: translateY(0); box-shadow: 0 0 0 rgba(102, 252, 241, 0); }
+    40% { transform: translateY(-5px); box-shadow: 0 0 25px rgba(102, 252, 241, 0.5); }
+    100% { transform: translateY(0); box-shadow: 0 0 0 rgba(102, 252, 241, 0); }
+}
+
+.card-added { animation: cardCombo 0.5s ease-out; }
+
+@keyframes btnCombo {
+    0% { transform: translateY(0); box-shadow: 0 0 0 rgba(102, 252, 241, 0); }
+    40% { transform: translateY(-4px); box-shadow: 0 0 20px rgba(102, 252, 241, 0.5); }
+    100% { transform: translateY(0); box-shadow: 0 0 0 rgba(102, 252, 241, 0); }
+}
+
+.btn-added { animation: btnCombo 0.5s ease-out; }
+
+@keyframes cardRemove {
+    0% { transform: rotate(0); opacity: 1; }
+    40% { transform: rotate(-1.5deg); opacity: 0.7; }
+    70% { transform: rotate(1deg); opacity: 0.85; }
+    100% { transform: rotate(0); opacity: 1; }
+}
+
+.card-removed { animation: cardRemove 0.5s ease-out; }
+
+@keyframes btnRemove {
+    0% { transform: rotate(0); opacity: 1; }
+    40% { transform: rotate(-1.5deg); opacity: 0.7; }
+    70% { transform: rotate(1deg); opacity: 0.85; }
+    100% { transform: rotate(0); opacity: 1; }
+}
+
+.btn-removed { animation: btnRemove 0.5s ease-out; }
+
+/* ============================================================
+   CONFETTI
+   ============================================================ */
+.confetti-piece {
+    position: fixed;
+    width: 10px;
+    height: 14px;
+    background-color: var(--accent);
+    pointer-events: none;
+    z-index: 9999;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(102, 252, 241, 0.8);
+    will-change: transform, opacity;
+}
+
+.confetti-piece.circle { width: 10px; height: 10px; border-radius: 50%; }
+.confetti-piece.square { width: 8px; height: 8px; border-radius: 1px; }
+.confetti-piece.long { width: 4px; height: 16px; border-radius: 2px; }
+
+@keyframes confettiFly {
+    0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(var(--scale)); opacity: 0; }
+}
+
+@media (max-width: 600px) {
+    .confetti-piece { width: 8px; height: 11px; }
+    .confetti-piece.circle { width: 8px; height: 8px; }
+    .confetti-piece.square { width: 6px; height: 6px; }
+    .confetti-piece.long { width: 3px; height: 13px; }
+}
+
+/* ============================================================
+   VIDEO TABS
+   ============================================================ */
+.video-tabs {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--accent-soft);
+    background-color: var(--bg-panel);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+.video-tabs-nav {
+    display: flex;
+    background-color: var(--bg-main);
+    border-bottom: 1px solid var(--accent-soft);
+}
+
+.video-tab-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 14px 16px;
+    font-size: calc(0.95rem * var(--font-scale));
+    font-family: inherit;
+    font-weight: 600;
+    color: var(--accent-soft);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    border-bottom: 3px solid transparent;
+}
+
+.video-tab-btn:hover {
+    color: var(--accent);
+    background-color: rgba(102, 252, 241, 0.05);
+}
+
+.video-tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    background-color: rgba(102, 252, 241, 0.08);
+}
+
+.video-tab-btn svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+}
+
+.video-tabs-content {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: #000;
+}
+
+.video-tab-pane {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+    text-align: center;
+}
+
+.video-tab-pane.active { display: flex; }
+
+.video-tab-pane iframe,
+.video-tab-pane video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+.video-tab-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--accent-soft);
+}
+
+.video-tab-icon {
+    font-size: 3.5rem;
+    display: block;
+    margin-bottom: 8px;
+    animation: videoPulse 2s ease-in-out infinite;
+}
+
+@keyframes videoPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.video-tab-title {
+    color: var(--accent);
+    font-size: calc(1.6rem * var(--font-scale));
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.video-tab-text {
+    color: var(--accent-soft);
+    font-size: calc(0.95rem * var(--font-scale));
+    max-width: 400px;
+}
+
+@media (max-width: 600px) {
+    .video-tab-btn {
+        padding: 12px 8px;
+        font-size: calc(0.8rem * var(--font-scale));
+        gap: 5px;
+    }
+    .video-tab-btn svg { width: 15px; height: 15px; }
+    .video-tab-icon { font-size: 2.5rem; }
+    .video-tab-title { font-size: calc(1.2rem * var(--font-scale)); }
+    .video-tab-text { font-size: 0.85rem; padding: 0 10px; }
+}
+
+/* ============================================================
+   CONTACTS — секция «Контакты» внизу главной (без панели)
+   ============================================================ */
+.contacts-section {
+    margin-top: 60px;
+    padding: 40px 20px 20px;
+    border-top: 1px solid rgba(102, 252, 241, 0.15);
+    text-align: center;
+}
+
+html.light-theme .contacts-section {
+    border-top-color: rgba(14, 143, 134, 0.15);
+}
+
+.contacts-title {
+    color: var(--accent);
+    font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+    font-weight: 600;
+    font-size: calc(1.05rem * var(--font-scale));
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.contacts-subtitle {
+    color: var(--accent-soft);
+    font-size: calc(0.8rem * var(--font-scale));
+    margin-bottom: 20px;
+}
+
+.contacts-grid {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 22px;
+    flex-wrap: wrap;
+}
+
+.contact-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.25s ease;
+}
+
+.contact-item:hover {
+    transform: translateY(-3px);
+}
+
+.contact-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 2px solid var(--accent-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+    color: var(--accent);
+}
+
+.contact-icon svg {
+    width: 21px;
+    height: 21px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.contact-item:hover .contact-icon {
+    background-color: var(--accent);
+    color: var(--bg-main);
+    border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(102, 252, 241, 0.5);
+}
+
+.contact-label {
+    font-size: calc(0.75rem * var(--font-scale));
+    color: var(--accent-soft);
+    font-weight: 500;
+    transition: color 0.25s ease;
+}
+
+.contact-item:hover .contact-label {
+    color: var(--accent);
+}
+
+@media (max-width: 600px) {
+    .contacts-section {
+        padding: 30px 15px 10px;
+        margin-top: 40px;
+    }
+    .contacts-grid {
+        gap: 16px;
+    }
+    .contact-icon {
+        width: 40px;
+        height: 40px;
+    }
+    .contact-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+    .contact-label {
+        font-size: 0.7rem;
+    }
 }
 
 /* ============================================================
@@ -855,10 +1377,6 @@ footer {
 @media (max-width: 600px) {
     nav { padding: 10px 15px; }
     .logo-text { display: none; }
-    .back-to-top {
-        bottom: 16px; right: 16px;
-        width: 44px; height: 44px;
-    }
     .toast { bottom: 80px; }
     .about-panel { width: 100%; max-width: 100%; }
     .density-btn {
@@ -872,4 +1390,13 @@ footer {
         height: 18px;
     }
     .nav-search-input { font-size: 0.9rem; padding: 12px 40px 12px 40px; }
+    .floating-actions {
+        bottom: 16px;
+        right: 16px;
+        gap: 10px;
+    }
+    .floating-btn {
+        width: 44px;
+        height: 44px;
+    }
 }

@@ -7,6 +7,18 @@
     <meta name="theme-color" content="#0b0c10">
     <link rel="icon" href="logo.png">
 
+    <!-- SEO / Open Graph -->
+    <meta property="og:type" content="video.other">
+    <meta property="og:site_name" content="BohtanVoice">
+    <meta property="og:title" content="Three Bogatyrs and the Princess of Egypt — BohtanVoice">
+    <meta property="og:description" content="Coming soon: Three Bogatyrs and the Princess of Egypt, dubbed in the Bohtan dialect.">
+    <meta property="og:image" content="poster1.jpg">
+    <meta property="og:url" content="video1.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Three Bogatyrs and the Princess of Egypt — BohtanVoice">
+    <meta name="twitter:description" content="Coming soon on BohtanVoice.">
+    <meta name="twitter:image" content="poster1.jpg">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -16,10 +28,6 @@
     <title>Three Bogatyrs and the Princess of Egypt — BohtanVoice</title>
 
     <style>
-        /* ============================================================
-           Стили, уникальные для страницы видео
-           ============================================================ */
-
         .container {
             max-width: 1000px;
             margin: 0 auto;
@@ -177,56 +185,11 @@
             color: var(--text-main);
         }
 
-        .coming-soon-box {
-            width: 100%;
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 2px solid var(--accent-soft);
-            background: linear-gradient(135deg, var(--bg-panel), var(--bg-main));
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-            padding: 60px 20px;
-            text-align: center;
-            min-height: 300px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-
-        .coming-soon-icon {
-            font-size: 4rem;
-            display: block;
-            margin-bottom: 8px;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.8; }
-        }
-
-        .coming-soon-title {
-            color: var(--accent);
-            font-size: calc(1.8rem * var(--font-scale));
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-
-        .coming-soon-text {
-            color: var(--accent-soft);
-            font-size: calc(1rem * var(--font-scale));
-            max-width: 400px;
-        }
-
         @media (max-width: 700px) {
             .info-section { grid-template-columns: 1fr; gap: 24px; }
             .info-poster { max-width: 240px; margin: 0 auto; }
             .info-title { text-align: center; }
             .actions-row { justify-content: center; }
-            .coming-soon-box { padding: 40px 16px; min-height: 240px; }
-            .coming-soon-icon { font-size: 3rem; }
         }
 
         @media (max-width: 600px) {
@@ -237,7 +200,6 @@
 </head>
 <body>
 
-    <!-- ================= NAV (единая) ================= -->
     <nav>
         <a href="index.html" class="logo-container">
             <img src="logo.png" alt="BohtanVoice" class="site-logo">
@@ -275,13 +237,12 @@
 
         <ul class="nav-links" id="navLinks">
             <li><a href="#" id="aboutLink" data-en="About Us" data-ru="О нас">About Us</a></li>
-            <li><a href="#" id="projectLink" data-en="About the Project" data-ru="О проекте">About the Project</a></li>
+            <li><a href="#" id="dialectLink" data-en="About the Dialect" data-ru="О диалекте">About the Dialect</a></li>
             <li><a href="samples.html" data-en="Our First Experience" data-ru="Наш первый опыт">Our First Experience</a></li>
             <li><a href="#contacts" data-en="Contacts" data-ru="Контакты">Contacts</a></li>
         </ul>
     </nav>
 
-    <!-- Раскрывающийся поиск -->
     <div class="nav-search-wrap" id="navSearchWrap">
         <div class="nav-search-box">
             <svg class="nav-search-icon" viewBox="0 0 24 24">
@@ -301,7 +262,6 @@
         <div class="nav-search-results" id="navSearchResults"></div>
     </div>
 
-    <!-- ================= CONTENT ================= -->
     <div class="container">
         <a href="index.html" class="back-link">
             <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
@@ -309,7 +269,6 @@
         </a>
 
         <div class="info-section">
-
             <div class="info-poster">
                 <img src="poster1.jpg" alt="Три богатыря и Принцесса Египта poster">
             </div>
@@ -363,7 +322,6 @@
                     </button>
                 </div>
             </div>
-
         </div>
 
         <h2 class="section-heading">
@@ -373,22 +331,54 @@
         <div class="description-block"
              data-en="On New Year's Eve, the bogatyrs, Yuliy the horse, and the Prince of Kiev head off to distant Egypt. Trying to become the main month of the year, a cunning thirteenth month named Durilo triggers ancient magic that threatens to plunge the Earth into a new ice age. The heroes must save the holiday, unlock the secrets of the pyramids, and tame a waking Egyptian princess. A dynamic, humor-filled New Year's adventure for the whole family!"
              data-ru="В новогоднюю ночь богатыри, конь Юлий и Киевский князь отправляются в далёкий Египет. Пытаясь стать главным месяцем года, коварный тринадцатый месяц Дурило затевает древнюю магию, которая грозит обернуться ледниковым периодом для всей Земли. Героям предстоит спасти праздник, разгадать тайны пирамид и укротить проснувшуюся египетскую принцессу. Динамичный и полный юмора новогодний мультфильм для всей семьи!">
-            On New Year's Eve, the bogatyrs, Yuliy the horse, and the Prince of Kiev head off to distant Egypt. Trying to become the main month of the year, a cunning thirteenth month named Durilo triggers ancient magic that threatens to plunge the Earth into a new ice age. The heroes must save the holiday, unlock the secrets of the pyramids, and tame a waking Egyptian princess. A dynamic, humor-filled New Year's adventure for the whole family!
+            On New Year's Eve, the bogatyrs, Yuliy the horse, and the Prince of Kiev head off to distant Egypt...
         </div>
 
         <h2 class="section-heading">
             <span>🎬</span>
             <span data-en="Watch the dub" data-ru="Смотреть озвучку">Watch the dub</span>
         </h2>
-        <div class="coming-soon-box">
-            <span class="coming-soon-icon">🎬</span>
-            <div class="coming-soon-title" data-en="COMING SOON" data-ru="СКОРО">COMING SOON</div>
-            <div class="coming-soon-text" data-en="The voiceover is in production. Follow the updates!" data-ru="Озвучка находится в производстве. Следите за обновлениями!">The voiceover is in production. Follow the updates!</div>
-        </div>
 
+        <div class="video-tabs" id="videoTabs">
+            <div class="video-tabs-nav">
+                <button class="video-tab-btn active" data-tab="trailer">
+                    <svg viewBox="0 0 24 24">
+                        <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                        <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                    </svg>
+                    <span data-en="Trailer" data-ru="Трейлер">Trailer</span>
+                </button>
+                <button class="video-tab-btn" data-tab="full">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+                        <line x1="7" y1="4" x2="7" y2="20"></line>
+                        <line x1="17" y1="4" x2="17" y2="20"></line>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                    </svg>
+                    <span data-en="Cartoon" data-ru="Мультфильм">Cartoon</span>
+                </button>
+            </div>
+
+            <div class="video-tabs-content">
+                <div class="video-tab-pane active" id="videoPaneTrailer" data-tab="trailer">
+                    <div class="video-tab-placeholder">
+                        <span class="video-tab-icon">🎬</span>
+                        <div class="video-tab-title" data-en="COMING SOON" data-ru="СКОРО">COMING SOON</div>
+                        <div class="video-tab-text" data-en="Trailer is in production. Follow the updates!" data-ru="Трейлер в работе. Следите за обновлениями!">Trailer is in production. Follow the updates!</div>
+                    </div>
+                </div>
+
+                <div class="video-tab-pane" id="videoPaneFull" data-tab="full">
+                    <div class="video-tab-placeholder">
+                        <span class="video-tab-icon">🎞</span>
+                        <div class="video-tab-title" data-en="COMING SOON" data-ru="СКОРО">COMING SOON</div>
+                        <div class="video-tab-text" data-en="Full cartoon is in production. Follow the updates!" data-ru="Мультфильм в производстве. Следите за обновлениями!">Full cartoon is in production. Follow the updates!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- ================= FOOTER ================= -->
     <footer>
         <p>&copy; 2026 BohtanVoice. All rights reserved.</p>
     </footer>
@@ -398,17 +388,17 @@
     <div class="about-panel" id="aboutPanel">
         <button class="about-close" id="aboutClose">&times;</button>
         <h2 data-en="About Us" data-ru="О нас">About Us</h2>
-        <p data-en="<strong>BohtanVoice</strong> is an independent project dedicated to blending modern animation with the preservation of cultural heritage. We create high-quality translations and professional voiceovers in the unique Bohtan dialect, bringing beloved stories closer to a global audience." data-ru="<strong>BohtanVoice</strong> — независимый проект, объединяющий современную анимацию с сохранением культурного наследия. Мы создаём качественные переводы и профессиональную озвучку на уникальном диалекте Bohtan, приближая любимые истории к зрителям по всему миру.">
-            <strong>BohtanVoice</strong> is an independent project dedicated to blending modern animation with the preservation of cultural heritage. We create high-quality translations and professional voiceovers in the unique Bohtan dialect, bringing beloved stories closer to a global audience.
+        <p data-en="We are a team from Gardabani (Georgia), united by our love for voiceover and our native language. Our goal is to create unique content in the Bohtan dialect of the Assyrian language.<br><br>Our journey began completely by accident: one day, just for fun, we re-dubbed a short excerpt from a cartoon. But after that first experience, something sparked inside us. We realized how exciting it is to bring familiar characters to life and hear them in our native dialect.<br><br>What started as a joke grew into a real shared mission and the creation of our own studio. Today we put our soul into every frame so that the dub is high-quality, lively, and sincere.<br><br>Thank you for being with us and sharing this love! ❤️🎙️" data-ru="Мы — команда из Гардабани (Грузия), объединённая любовью к озвучиванию и родному языку. Наша цель — создавать уникальный контент на бохтанском диалекте ассирийского языка.<br><br>Наш путь начался абсолютно случайно: однажды мы просто ради шутки переозвучили небольшой отрывок из мультфильма. Но уже после первого опыта внутри что-то зажглось. Мы поняли, насколько это увлекательный процесс — вдохнуть жизнь в знакомых персонажей и услышать их на нашем родном диалекте.<br><br>То, что не воспринималось всерьёз, переросло в настоящее общее дело и создание своей собственной студии. Сегодня мы вкладываем душу в каждый кадр, чтобы дубляж получался качественным, живым и искренним.<br><br>Спасибо, что вы с нами и разделяете эту любовь! ❤️🎙️">
+            We are a team from Gardabani (Georgia)...
         </p>
     </div>
 
-    <div class="about-overlay" id="projectOverlay"></div>
-    <div class="about-panel" id="projectPanel">
-        <button class="about-close" id="projectClose">&times;</button>
-        <h2 data-en="About the Project" data-ru="О проекте">About the Project</h2>
-        <p data-en="The Bohtan dialect is one of the rarest forms of Neo-Aramaic still spoken today, carried by only a small number of families. This project exists to give it new life through animation, so viewers can hear the language in a living, everyday context rather than only in academic records." data-ru="Диалект Bohtan — один из редчайших живых новоарамейских диалектов, на котором говорит лишь небольшое число семей. Этот проект существует, чтобы дать языку новую жизнь через анимацию — чтобы его можно было услышать не только в научных записях, но и в живой, повседневной речи.">
-            The Bohtan dialect is one of the rarest forms of Neo-Aramaic still spoken today, carried by only a small number of families. This project exists to give it new life through animation, so viewers can hear the language in a living, everyday context rather than only in academic records.
+    <div class="about-overlay" id="dialectOverlay"></div>
+    <div class="about-panel" id="dialectPanel">
+        <button class="about-close" id="dialectClose">&times;</button>
+        <h2 data-en="About the Bohtan Dialect" data-ru="О ботанайском диалекте">About the Bohtan Dialect</h2>
+        <p data-en="Our dialect is a unique and rare branch of the Neo-Aramaic languages, belonging to the Assyrian heritage. Historically, it originated in the Bohtan region (in the southeast of modern-day Turkey), and today it is spoken in the homes of Assyrians living around the world, including here in Georgia.<br><br>For us, this dialect is not just a means of communication, but a living connection to our ancestors, our culture, and family traditions. However, today it is among the endangered: fewer and fewer young people speak it fluently in everyday life.<br><br>Through cartoon dubbing and creating modern content, we want to breathe new life into the Bohtan dialect. We believe that a language lives when people joke in it, watch their favorite stories, and feel genuine emotions in it!" data-ru="Наш диалект — это уникальная и редкая ветвь новоарамейских языков, принадлежащая к ассирийскому наследию. Исторически он зародился в регионе Бохтан (на юго-востоке современной Турции), а сегодня звучит в домах ассирийцев, живущих в разных уголках мира, в том числе и у нас в Грузии.<br><br>Для нас этот диалект — не просто способ общения, а живая связь с предками, нашей культурой и семейными традициями. Однако сегодня он относится к числам исчезающих: всё меньше молодых людей свободно говорят на нём в повседневной жизни.<br><br>Через дубляж мультфильмов и создание современного контента мы хотим вдохнуть в ботанайский диалект новую жизнь. Мы верим, что язык живёт тогда, когда на нём шутят, смотрят любимые истории и чувствуют искренние эмоции!">
+            Our dialect is a unique and rare branch...
         </p>
     </div>
 
@@ -491,31 +481,37 @@
         </div>
     </div>
 
-    <!-- ================= BACK TO TOP ================= -->
-    <button class="back-to-top" id="backToTop" aria-label="Back to top">
-        <svg viewBox="0 0 24 24">
-            <polyline points="18 15 12 9 6 15"></polyline>
-        </svg>
-    </button>
+    <div class="scroll-progress" id="scrollProgress"></div>
 
-    <!-- ================= TOAST ================= -->
+    <div class="floating-actions" id="floatingActions">
+        <button class="floating-btn" id="sharePageBtn" aria-label="Share page">
+            <svg viewBox="0 0 24 24">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+        </button>
+
+        <button class="floating-btn" id="backToTop" aria-label="Back to top">
+            <svg viewBox="0 0 24 24">
+                <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+        </button>
+    </div>
+
     <div class="toast" id="toast">
         <span class="toast-icon" id="toastIcon">✓</span>
         <span id="toastText"></span>
     </div>
 
-    <!-- ================= SCRIPTS ================= -->
     <script src="videos.js"></script>
     <script src="app.js"></script>
 
     <script>
-        /* ============================================================
-           Логика, уникальная для страницы видео
-           ============================================================ */
-
         const CURRENT_VIDEO_ID = 'video1';
 
-        /* ---------- Обновление кнопки "В избранное" ---------- */
         function updateFavButtonLabel() {
             const favBtn = document.getElementById('favBtn');
             const favBtnText = document.getElementById('favBtnText');
@@ -533,7 +529,6 @@
             }
         }
 
-        /* ---------- Кнопка "В избранное" ---------- */
         function initFavBtn() {
             const favBtn = document.getElementById('favBtn');
             if (!favBtn) return;
@@ -546,7 +541,6 @@
             });
         }
 
-        /* ---------- Кнопка "Поделиться" ---------- */
         function initShare() {
             const shareBtn = document.getElementById('shareBtn');
             if (!shareBtn) return;
@@ -580,7 +574,6 @@
             });
         }
 
-        /* ---------- Обновление заголовка страницы ---------- */
         function updatePageTitle() {
             const video = getVideoById(CURRENT_VIDEO_ID);
             if (video) {
@@ -589,7 +582,6 @@
             }
         }
 
-        /* ---------- Инициализация ---------- */
         document.addEventListener('DOMContentLoaded', () => {
             initFavBtn();
             initShare();

@@ -7,6 +7,18 @@
     <meta name="theme-color" content="#0b0c10">
     <link rel="icon" href="logo.png">
 
+    <!-- SEO / Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="BohtanVoice">
+    <meta property="og:title" content="BohtanVoice — Animation Voiceover Studio">
+    <meta property="og:description" content="Animation voiceover studio in the Bohtan dialect. Dubs of beloved cartoons preserving a rare Neo-Aramaic language.">
+    <meta property="og:image" content="poster1.jpg">
+    <meta property="og:url" content="index.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="BohtanVoice — Animation Voiceover Studio">
+    <meta name="twitter:description" content="Animation voiceover studio in the Bohtan dialect.">
+    <meta name="twitter:image" content="poster1.jpg">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -419,9 +431,9 @@
 
         <ul class="nav-links" id="navLinks">
             <li><a href="#" id="aboutLink" data-en="About Us" data-ru="О нас">About Us</a></li>
-            <li><a href="#" id="projectLink" data-en="About the Project" data-ru="О проекте">About the Project</a></li>
+            <li><a href="#" id="dialectLink" data-en="About the Dialect" data-ru="О диалекте">About the Dialect</a></li>
             <li><a href="samples.html" data-en="Our First Experience" data-ru="Наш первый опыт">Our First Experience</a></li>
-            <li><a href="#contacts" data-en="Contacts" data-ru="Контакты">Contacts</a></li>
+            <li><a href="#contacts" id="contactsLink" data-en="Contacts" data-ru="Контакты">Contacts</a></li>
         </ul>
     </nav>
 
@@ -468,6 +480,46 @@
             <span data-en="Nothing found. Try another search." data-ru="Ничего не найдено. Попробуйте другой запрос.">Nothing found. Try another search.</span>
         </div>
 
+        <!-- ================= CONTACTS ================= -->
+        <section class="contacts-section" id="contacts">
+            <h2 class="contacts-title">
+                <span>📞</span>
+                <span data-en="Contacts" data-ru="Контакты">Contacts</span>
+            </h2>
+            <p class="contacts-subtitle" data-en="Get in touch" data-ru="Свяжитесь с нами">Get in touch</p>
+
+            <div class="contacts-grid">
+                <a href="https://t.me/BohtanVoicee" target="_blank" rel="noopener" class="contact-item" aria-label="Telegram">
+                    <span class="contact-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M22 2L11 13"></path>
+                            <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+                        </svg>
+                    </span>
+                    <span class="contact-label">Telegram</span>
+                </a>
+
+                <a href="https://www.tiktok.com/@bohtanvoice" target="_blank" rel="noopener" class="contact-item" aria-label="TikTok">
+                    <span class="contact-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
+                        </svg>
+                    </span>
+                    <span class="contact-label">TikTok</span>
+                </a>
+
+                <a href="mailto:bohtanvoice@gmail.com" class="contact-item" aria-label="Email">
+                    <span class="contact-icon">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                    </span>
+                    <span class="contact-label">Email</span>
+                </a>
+            </div>
+        </section>
+
     </div>
 
     <!-- ================= FOOTER ================= -->
@@ -480,17 +532,17 @@
     <div class="about-panel" id="aboutPanel">
         <button class="about-close" id="aboutClose">&times;</button>
         <h2 data-en="About Us" data-ru="О нас">About Us</h2>
-        <p data-en="<strong>BohtanVoice</strong> is an independent project dedicated to blending modern animation with the preservation of cultural heritage. We create high-quality translations and professional voiceovers in the unique Bohtan dialect, bringing beloved stories closer to a global audience." data-ru="<strong>BohtanVoice</strong> — независимый проект, объединяющий современную анимацию с сохранением культурного наследия. Мы создаём качественные переводы и профессиональную озвучку на уникальном диалекте Bohtan, приближая любимые истории к зрителям по всему миру.">
-            <strong>BohtanVoice</strong> is an independent project dedicated to blending modern animation with the preservation of cultural heritage. We create high-quality translations and professional voiceovers in the unique Bohtan dialect, bringing beloved stories closer to a global audience.
+        <p data-en="We are a team from Gardabani (Georgia), united by our love for voiceover and our native language. Our goal is to create unique content in the Bohtan dialect of the Assyrian language.<br><br>Our journey began completely by accident: one day, just for fun, we re-dubbed a short excerpt from a cartoon. But after that first experience, something sparked inside us. We realized how exciting it is to bring familiar characters to life and hear them in our native dialect.<br><br>What started as a joke grew into a real shared mission and the creation of our own studio. Today we put our soul into every frame so that the dub is high-quality, lively, and sincere.<br><br>Thank you for being with us and sharing this love! ❤️🎙️" data-ru="Мы — команда из Гардабани (Грузия), объединённая любовью к озвучиванию и родному языку. Наша цель — создавать уникальный контент на бохтанском диалекте ассирийского языка.<br><br>Наш путь начался абсолютно случайно: однажды мы просто ради шутки переозвучили небольшой отрывок из мультфильма. Но уже после первого опыта внутри что-то зажглось. Мы поняли, насколько это увлекательный процесс — вдохнуть жизнь в знакомых персонажей и услышать их на нашем родном диалекте.<br><br>То, что не воспринималось всерьёз, переросло в настоящее общее дело и создание своей собственной студии. Сегодня мы вкладываем душу в каждый кадр, чтобы дубляж получался качественным, живым и искренним.<br><br>Спасибо, что вы с нами и разделяете эту любовь! ❤️🎙️">
+            We are a team from Gardabani (Georgia), united by our love for voiceover and our native language...
         </p>
     </div>
 
-    <div class="about-overlay" id="projectOverlay"></div>
-    <div class="about-panel" id="projectPanel">
-        <button class="about-close" id="projectClose">&times;</button>
-        <h2 data-en="About the Project" data-ru="О проекте">About the Project</h2>
-        <p data-en="The Bohtan dialect is one of the rarest forms of Neo-Aramaic still spoken today, carried by only a small number of families. This project exists to give it new life through animation, so viewers can hear the language in a living, everyday context rather than only in academic records." data-ru="Диалект Bohtan — один из редчайших живых новоарамейских диалектов, на котором говорит лишь небольшое число семей. Этот проект существует, чтобы дать языку новую жизнь через анимацию — чтобы его можно было услышать не только в научных записях, но и в живой, повседневной речи.">
-            The Bohtan dialect is one of the rarest forms of Neo-Aramaic still spoken today, carried by only a small number of families. This project exists to give it new life through animation, so viewers can hear the language in a living, everyday context rather than only in academic records.
+    <div class="about-overlay" id="dialectOverlay"></div>
+    <div class="about-panel" id="dialectPanel">
+        <button class="about-close" id="dialectClose">&times;</button>
+        <h2 data-en="About the Bohtan Dialect" data-ru="О ботанайском диалекте">About the Bohtan Dialect</h2>
+        <p data-en="Our dialect is a unique and rare branch of the Neo-Aramaic languages, belonging to the Assyrian heritage. Historically, it originated in the Bohtan region (in the southeast of modern-day Turkey), and today it is spoken in the homes of Assyrians living around the world, including here in Georgia.<br><br>For us, this dialect is not just a means of communication, but a living connection to our ancestors, our culture, and family traditions. However, today it is among the endangered: fewer and fewer young people speak it fluently in everyday life.<br><br>Through cartoon dubbing and creating modern content, we want to breathe new life into the Bohtan dialect. We believe that a language lives when people joke in it, watch their favorite stories, and feel genuine emotions in it!" data-ru="Наш диалект — это уникальная и редкая ветвь новоарамейских языков, принадлежащая к ассирийскому наследию. Исторически он зародился в регионе Бохтан (на юго-востоке современной Турции), а сегодня звучит в домах ассирийцев, живущих в разных уголках мира, в том числе и у нас в Грузии.<br><br>Для нас этот диалект — не просто способ общения, а живая связь с предками, нашей культурой и семейными традициями. Однако сегодня он относится к числам исчезающих: всё меньше молодых людей свободно говорят на нём в повседневной жизни.<br><br>Через дубляж мультфильмов и создание современного контента мы хотим вдохнуть в ботанайский диалект новую жизнь. Мы верим, что язык живёт тогда, когда на нём шутят, смотрят любимые истории и чувствуют искренние эмоции!">
+            Our dialect is a unique and rare branch of the Neo-Aramaic languages...
         </p>
     </div>
 
@@ -573,12 +625,27 @@
         </div>
     </div>
 
-    <!-- ================= BACK TO TOP ================= -->
-    <button class="back-to-top" id="backToTop" aria-label="Back to top">
-        <svg viewBox="0 0 24 24">
-            <polyline points="18 15 12 9 6 15"></polyline>
-        </svg>
-    </button>
+    <!-- ================= PROGRESS BAR ================= -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- ================= FLOATING ACTIONS ================= -->
+    <div class="floating-actions" id="floatingActions">
+        <button class="floating-btn" id="sharePageBtn" aria-label="Share page">
+            <svg viewBox="0 0 24 24">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+        </button>
+
+        <button class="floating-btn" id="backToTop" aria-label="Back to top">
+            <svg viewBox="0 0 24 24">
+                <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+        </button>
+    </div>
 
     <!-- ================= TOAST ================= -->
     <div class="toast" id="toast">
@@ -595,7 +662,6 @@
            Логика, уникальная для главной страницы
            ============================================================ */
 
-        /* ---------- Построение сетки постеров из ALL_VIDEOS ---------- */
         function buildProjectsGrid() {
             const grid = document.getElementById('projectsGrid');
             const lang = getLang();
@@ -628,21 +694,25 @@
                 grid.appendChild(card);
             });
 
-            /* Skeleton loading */
             grid.querySelectorAll('.poster-image-box img').forEach(img => {
                 const box = img.parentElement;
                 const markLoaded = () => {
                     img.classList.add('loaded');
                     box.classList.add('loaded');
                 };
-                if (img.complete && img.naturalWidth > 0) markLoaded();
-                else {
+
+                if (img.complete && img.naturalWidth > 0) {
+                    markLoaded();
+                } else {
                     img.addEventListener('load', markLoaded);
                     img.addEventListener('error', markLoaded);
+
+                    setTimeout(() => {
+                        if (img.complete && img.naturalWidth > 0) markLoaded();
+                    }, 50);
                 }
             });
 
-            /* Кнопки избранного */
             grid.querySelectorAll('.fav-toggle').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -654,7 +724,22 @@
             applyFavStateOnPosters();
         }
 
-        /* ---------- Reveal on scroll ---------- */
+        /* Обновление названий БЕЗ пересоздания (без мерцания постера) */
+        function updatePosterTitles(lang) {
+            document.querySelectorAll('.poster-card').forEach(card => {
+                const id = card.getAttribute('data-video-id');
+                const vid = (typeof getVideoById === 'function') ? getVideoById(id) : null;
+                if (!vid) return;
+
+                const title = getVideoTitle(vid, lang);
+                const h3 = card.querySelector('.poster-info h3');
+                if (h3) h3.textContent = title;
+
+                const img = card.querySelector('.poster-image-box img');
+                if (img) img.alt = title;
+            });
+        }
+
         function initReveal() {
             const els = document.querySelectorAll('.poster-card');
             if ('IntersectionObserver' in window) {
@@ -672,7 +757,6 @@
             }
         }
 
-        /* ---------- Hero animation ---------- */
         function initHero() {
             const heroTitle = document.getElementById('heroTitle');
             const soundWave = document.getElementById('soundWave');
@@ -715,17 +799,15 @@
             });
         }
 
-        /* ---------- Запуск ---------- */
         document.addEventListener('DOMContentLoaded', () => {
             buildProjectsGrid();
             initReveal();
             initHero();
 
-            /* Перестроить сетку при смене языка */
             const langEnBtn = document.getElementById('langEn');
             const langRuBtn = document.getElementById('langRu');
-            if (langEnBtn) langEnBtn.addEventListener('click', () => setTimeout(buildProjectsGrid, 0));
-            if (langRuBtn) langRuBtn.addEventListener('click', () => setTimeout(buildProjectsGrid, 0));
+            if (langEnBtn) langEnBtn.addEventListener('click', () => updatePosterTitles('en'));
+            if (langRuBtn) langRuBtn.addEventListener('click', () => updatePosterTitles('ru'));
         });
     </script>
 

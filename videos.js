@@ -12,7 +12,11 @@ const ALL_VIDEOS = [
         poster: 'poster1.jpg',
         url: 'video1.html',
         searchEn: 'three bogatyrs princess egypt adventure family animation',
-        searchRu: 'три богатыря принцесса египта приключения семейный мультфильм'
+        searchRu: 'три богатыря принцесса египта приключения семейный мультфильм',
+
+        /* Ссылки на видео (вставить, когда будут готовы) */
+        trailer: '',      /* ← сюда ссылку на трейлер (Bunny Stream) */
+        fullMovie: ''     /* ← сюда ссылку на полный мультфильм */
     }
     // Новые видео добавляй сюда:
     // {
@@ -22,7 +26,9 @@ const ALL_VIDEOS = [
     //     poster: 'poster2.jpg',
     //     url: 'video2.html',
     //     searchEn: '...',
-    //     searchRu: '...'
+    //     searchRu: '...',
+    //     trailer: '',
+    //     fullMovie: ''
     // }
 ];
 

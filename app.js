@@ -82,6 +82,9 @@ function applyLanguage(lang) {
 
     document.documentElement.lang = lang;
 
+    /* Уведомляем страницы, что язык сменился — они сами обновят свои элементы */
+    document.dispatchEvent(new CustomEvent('languagechange', { detail: { lang } }));
+
     if (typeof renderFavorites === 'function') renderFavorites();
     if (typeof updateFavButtonLabel === 'function') updateFavButtonLabel();
     if (typeof renderNavSearchResults === 'function') renderNavSearchResults();
@@ -226,12 +229,13 @@ function renderFavorites() {
         const title = getVideoTitle(vid, lang);
 
         const li = document.createElement('li');
+        li.className = 'fav-item-row';
         li.innerHTML = `
             <a href="${vid.url}" class="fav-item">
                 <img class="fav-item-thumb" src="${vid.poster}" alt="">
                 <span class="fav-item-title">${title}</span>
-                <button class="fav-item-remove" data-remove-id="${id}" aria-label="Remove">&times;</button>
             </a>
+            <button class="fav-item-remove" data-remove-id="${id}" aria-label="Remove">&times;</button>
         `;
         favList.appendChild(li);
     });
@@ -249,7 +253,7 @@ function renderFavorites() {
 
             breakHeart(btn);
 
-            const favItem = btn.closest('.fav-item');
+            const favItem = btn.closest('.fav-item-row');
             if (favItem) {
                 favItem.classList.add('card-removed');
                 setTimeout(() => favItem.classList.remove('card-removed'), 550);
@@ -456,6 +460,12 @@ function renderNavSearchResults() {
     const resultsBox = document.getElementById('navSearchResults');
     const searchInput = document.getElementById('navSearchInput');
     if (!resultsBox || !searchInput) return;
+
+    /* Страховка: если videos.js не загрузился — не падаем */
+    if (typeof ALL_VIDEOS === 'undefined' || !Array.isArray(ALL_VIDEOS)) {
+        resultsBox.classList.remove('open');
+        return;
+    }
 
     const q = searchInput.value.trim().toLowerCase();
     resultsBox.innerHTML = '';
@@ -695,11 +705,15 @@ function initVideoTabs() {
     const tabBtns = tabsContainer.querySelectorAll('.video-tab-btn');
 
     if (video) {
-        if (video.trailer && trailerPane) {
-            trailerPane.innerHTML = `<iframe src="${video.trailer}" allowfullscreen allow="autoplay; fullscreen"></iframe>`;
+        /* Страховка: вставляем iframe только если ссылка реально есть */
+        const trailerUrl = (video.trailer || '').trim();
+        const fullUrl = (video.fullMovie || '').trim();
+
+        if (trailerUrl && trailerPane) {
+            trailerPane.innerHTML = `<iframe src="${trailerUrl}" allowfullscreen allow="autoplay; fullscreen"></iframe>`;
         }
-        if (video.fullMovie && fullMoviePane) {
-            fullMoviePane.innerHTML = `<iframe src="${video.fullMovie}" allowfullscreen allow="autoplay; fullscreen"></iframe>`;
+        if (fullUrl && fullMoviePane) {
+            fullMoviePane.innerHTML = `<iframe src="${fullUrl}" allowfullscreen allow="autoplay; fullscreen"></iframe>`;
         }
     }
 

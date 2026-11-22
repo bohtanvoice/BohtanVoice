@@ -7,12 +7,12 @@
 const ALL_VIDEOS = [
     {
         id: 'video1',
-        titleEn: 'Three Bogatyrs and the Princess of Egypt',
-        titleRu: 'Три богатыря и Принцесса Египта',
+        titleEn: 'The Croods',
+        titleRu: 'Семейка Крудс',
         poster: 'poster1.jpg',
         url: 'video1.html',
-        searchEn: 'three bogatyrs princess egypt adventure family animation',
-        searchRu: 'три богатыря принцесса египта приключения семейный мультфильм',
+        searchEn: 'the croods prehistoric family adventure comedy animation dreamworks',
+        searchRu: 'семейка крудс доисторическая семья приключения комедия мультфильм dreamworks',
 
         /* Ссылки на видео (вставить, когда будут готовы) */
         trailer: '',      /* ← сюда ссылку на трейлер (Bunny Stream) */

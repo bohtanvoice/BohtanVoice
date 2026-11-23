@@ -8,16 +8,24 @@
     <link rel="icon" href="logo.png">
 
     <!-- SEO / Open Graph -->
+    <link rel="canonical" href="https://bohtanvoice.github.io/BohtanVoice/samples.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="BohtanVoice">
     <meta property="og:title" content="Our First Experience — BohtanVoice">
     <meta property="og:description" content="Our first voiceover experiments in the Bohtan dialect: Zootopia and Shrek excerpts.">
-    <meta property="og:image" content="poster1.jpg">
-    <meta property="og:url" content="samples.html">
+    <meta property="og:image" content="https://bohtanvoice.github.io/BohtanVoice/poster1.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1000">
+    <meta property="og:image:height" content="1426">
+    <meta property="og:image:alt" content="Our first voiceover experience — BohtanVoice">
+    <meta property="og:url" content="https://bohtanvoice.github.io/BohtanVoice/samples.html">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:locale:alternate" content="ru_RU">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Our First Experience — BohtanVoice">
     <meta name="twitter:description" content="Our first voiceover experiments in the Bohtan dialect.">
-    <meta name="twitter:image" content="poster1.jpg">
+    <meta name="twitter:image" content="https://bohtanvoice.github.io/BohtanVoice/poster1.jpg">
+    <meta name="twitter:image:alt" content="Our first voiceover experience — BohtanVoice">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,6 +34,28 @@
     <link rel="stylesheet" href="style.css">
 
     <title>Our First Experience — BohtanVoice</title>
+
+    <!-- Структурированные данные: страница -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": "https://bohtanvoice.github.io/BohtanVoice/samples.html",
+        "url": "https://bohtanvoice.github.io/BohtanVoice/samples.html",
+        "name": "Our First Experience — BohtanVoice",
+        "description": "Our first voiceover experiments in the Bohtan dialect: Zootopia and Shrek excerpts.",
+        "inLanguage": ["en", "ru"],
+        "publisher": {
+            "@type": "Organization",
+            "name": "BohtanVoice",
+            "url": "https://bohtanvoice.github.io/BohtanVoice/",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://bohtanvoice.github.io/BohtanVoice/logo.png"
+            }
+        }
+    }
+    </script>
 
     <style>
         .container {
@@ -78,6 +108,7 @@
 
         .sample-section {
             margin-bottom: 45px;
+            scroll-margin-top: 100px;
         }
 
         .sample-heading {
@@ -206,37 +237,41 @@
             Our first experience in voiceover. It was with these short excerpts that the BohtanVoice studio began — a journey we continue today.
         </div>
 
-        <section class="sample-section">
+        <section class="sample-section" id="shrek">
             <h2 class="sample-heading">
                 <span class="emoji">🎬</span>
-                <span data-en="Zootopia — excerpt" data-ru="Zootopia — отрывок">Zootopia — excerpt</span>
-            </h2>
-            <div class="player-box">
-                <iframe
-                    src="https://streamable.com/e/mmlei1"
-                    allowfullscreen></iframe>
-            </div>
-            <p class="sample-description"
-               data-en="A short excerpt from Zootopia, dubbed as our very first experiment in the Bohtan dialect."
-               data-ru="Короткий отрывок из «Зверополиса», озвученный как самый первый наш эксперимент на диалекте Bohtan.">
-                A short excerpt from Zootopia, dubbed as our very first experiment in the Bohtan dialect.
-            </p>
-        </section>
-
-        <section class="sample-section">
-            <h2 class="sample-heading">
-                <span class="emoji">🎬</span>
-                <span data-en="Shrek — excerpt" data-ru="Shrek — отрывок">Shrek — excerpt</span>
+                <span data-en="Shrek — excerpt" data-ru="Шрек — отрывок">Shrek — excerpt</span>
             </h2>
             <div class="player-box">
                 <iframe
                     src="https://streamable.com/e/hfk1g5"
+                    title="Shrek — BohtanVoice dub excerpt"
+                    allow="fullscreen; picture-in-picture"
                     allowfullscreen></iframe>
             </div>
             <p class="sample-description"
-               data-en="A short excerpt from Shrek — another early experiment that shaped our approach to dubbing."
-               data-ru="Короткий отрывок из «Шрека» — ещё один ранний эксперимент, который сформировал наш подход к озвучке.">
-                A short excerpt from Shrek — another early experiment that shaped our approach to dubbing.
+               data-en="The very first excerpt we ever dubbed — where it all began."
+               data-ru="Самый первый отрывок, который мы озвучили — с него всё началось.">
+                The very first excerpt we ever dubbed — where it all began.
+            </p>
+        </section>
+
+        <section class="sample-section" id="zootopia">
+            <h2 class="sample-heading">
+                <span class="emoji">🎬</span>
+                <span data-en="Zootopia — excerpt" data-ru="Зверополис — отрывок">Zootopia — excerpt</span>
+            </h2>
+            <div class="player-box">
+                <iframe
+                    src="https://streamable.com/e/mmlei1"
+                    title="Zootopia — BohtanVoice dub excerpt"
+                    allow="fullscreen; picture-in-picture"
+                    allowfullscreen></iframe>
+            </div>
+            <p class="sample-description"
+               data-en="Our second experiment — a step forward in finding our voice."
+               data-ru="Наш второй эксперимент — шаг вперёд в поиске своего звучания.">
+                Our second experiment — a step forward in finding our voice.
             </p>
         </section>
 
